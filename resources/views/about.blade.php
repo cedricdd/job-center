@@ -1,4 +1,4 @@
-@extends("Layouts.main")
+@extends("layouts.main")
 
 @section("title", "About Page")
 
