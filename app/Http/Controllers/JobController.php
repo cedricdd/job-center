@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\JobRequest;
-use App\Models\Employer;
 use App\Models\Job;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
@@ -26,9 +24,7 @@ class JobController extends Controller
      */
     public function create(): View
     {
-        $employers = Employer::all();
-
-        return view("jobs.create", compact("employers"));
+        return view("jobs.create");
     }
 
     /**
@@ -39,8 +35,7 @@ class JobController extends Controller
         $job = new Job();
         $job->title = $request->input("title");
         $job->salary = $request->input("salary");
-        $job->employer()->associate($request->input("employer_id"));
-        $job->save();
+        $job->employer()->associate($request->input("employer_id"))->save();
 
         return redirect()->route("jobs.index")->with("success", "The job was successfully created!");
     }
@@ -58,24 +53,31 @@ class JobController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Job $job): View
     {
-        //
+        return view("jobs.edit", compact('job'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(JobRequest $request, Job $job): RedirectResponse
     {
-        //
+        $job = new Job();
+        $job->title = $request->input("title");
+        $job->salary = $request->input("salary");
+        $job->employer()->associate($request->input("employer_id"))->save();
+
+        return redirect()->route("jobs.show", $job->id)->with("success", "The job $job->title was successfully updated!");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Job $job): RedirectResponse
     {
-        //
+        $job->delete();
+
+        return redirect()->route("jobs.index")->with("success", "The job $job->title was successfully deleted!");
     }
 }

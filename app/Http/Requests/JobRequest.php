@@ -22,8 +22,8 @@ class JobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "title" => "bail|required|string|max:255",
-            "salary" => "bail|required|string|max:255",
+            "title" => "bail|required|string|max:255|min:3",
+            "salary" => "bail|required|string|max:255|min:3",
             "employer_id" => "bail|required|integer|exists:employers,id",
         ];
     }
