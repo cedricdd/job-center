@@ -6,9 +6,20 @@ use App\Http\Requests\JobRequest;
 use App\Models\Job;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class JobController extends Controller
+class JobController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('auth', except: ['index', 'show']),
+            new Middleware('can:edit,job', only: ['edit', 'update']),
+            new Middleware('can:destroy,job', only: ['destroy']),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -63,7 +74,6 @@ class JobController extends Controller
      */
     public function update(JobRequest $request, Job $job): RedirectResponse
     {
-        $job = new Job();
         $job->title = $request->input("title");
         $job->salary = $request->input("salary");
         $job->employer()->associate($request->input("employer_id"))->save();

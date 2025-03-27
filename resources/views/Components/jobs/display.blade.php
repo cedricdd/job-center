@@ -9,11 +9,15 @@
         @endforeach
     </div>
     <div class="flex justify-end gap-2">
+        @can('destroy', $job)
         <form action="{{ route('jobs.destroy', $job->id) }}" method="POST">
             @csrf
             @method("DELETE")
             <x-button-red>Delete Job</x-button-red>
         </form>
+        @endcan
+        @can('edit', $job)
         <x-link-button-blue href="{{ route('jobs.edit', $job->id) }}">Edit Job</x-link-button-blue>
+        @endcan
     </div>
 </div>

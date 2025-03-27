@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Tag;
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,10 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory()->count(100)->create();
-
-        Tag::factory()->count(50)->create();
+        $tags = Tag::factory()->count(50)->create();
 
         $this->call(JobSeeder::class);
+        $this->call(UserSeeder::class);
     }
 }

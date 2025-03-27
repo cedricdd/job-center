@@ -10,7 +10,7 @@
         <x-form-input input-name="salary" label="Salary" placeholder="Enter Yearly Salary" value="{{ old('salary', $job?->salary) }}" required />
     </div>
     <div class="mb-5">
-        <x-form-select select-name="employer_id" label="Select Employer" :items="$employers" :current="$job?->employer->id" />
+        <x-form-select select-name="employer_id" label="Select Employer" :items="Auth::user()->employers" :current="$job?->employer->id" />
     </div>
     <div class="flex justify-end gap-2">
         <x-link-button-white href="{{ route('jobs.index') }}">Cancel</x-link-button-white>

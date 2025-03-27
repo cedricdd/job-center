@@ -11,11 +11,11 @@ Route::view('/contact', 'contact')->name("contact");
 
 Route::resource("jobs", controller: JobController::class);
 
-Route::get("register", [UserController::class, "create"])->name("users.create");
-Route::post("register", [UserController::class, "store"])->name("users.store");
+Route::get("register", [UserController::class, "create"])->name("users.create")->middleware('guest');
+Route::post("register", [UserController::class, "store"])->name("users.store")->middleware('guest');
 
-Route::get("login", [SessionController::class, "create"])->name("sessions.create");
-Route::post("login", [SessionController::class, "store"])->name("sessions.store");
-Route::delete("logout", [SessionController::class, "destroy"])->name("sessions.destroy");
+Route::get("login", [SessionController::class, "create"])->name("sessions.create")->middleware('guest');
+Route::post("login", [SessionController::class, "store"])->name("sessions.store")->middleware('guest');
+Route::delete("logout", [SessionController::class, "destroy"])->name("sessions.destroy")->middleware('auth');
 
 Route::fallback(fn() => redirect()->route("index"));

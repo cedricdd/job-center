@@ -32,6 +32,13 @@ class UserFactory extends Factory
         ];
     }
 
+    public function johnDoe(): static {
+        return $this->state(fn (array $attributes) => [
+            'name' => "John Doe",
+            'email' => "john@doe.com",
+        ]);
+    }
+
     /**
      * Indicate that the model's email address should be unverified.
      */

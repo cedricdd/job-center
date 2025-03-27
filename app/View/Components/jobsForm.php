@@ -6,6 +6,7 @@ use App\Models\Employer;
 use App\Models\Job;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class jobsForm extends Component
@@ -27,8 +28,6 @@ class jobsForm extends Component
      */
     public function render(): View|Closure|string
     {
-        $employers = Employer::all();
-
-        return view('components.jobs.form', compact('employers'));
+        return view('components.jobs.form');
     }
 }
