@@ -4,48 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    @vite(['resources/js/app.js'])
+
     <title>@yield('title')</title>
 
     @yield('header')
 </head>
 
-<body class="h-full">
-    <div class="min-h-full pb-6">
-        <nav class="bg-gray-800">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="flex h-16 items-center justify-between">
-                    <div class="flex items-center">
-                            <div class="ml-10 flex items-baseline space-x-4">
-                                <x-nav-link name="index">Home</x-nav-link>
-                                <x-nav-link name="jobs.index">Jobs</x-nav-link>
-                                <x-nav-link name="contact">Contact</x-nav-link>
-                                <x-nav-link name="about">About</x-nav-link>
-                            </div>
-                    </div>
-                    <div>
-                        @auth
-                            <form method="POST" action="{{ route('sessions.destroy') }}">
-                                @csrf
-                                @method("DELETE")
-                                <x-button-red>Logout</x-button-red>
-                            </form>
-                        @endauth
-                        @guest
-                            <x-nav-link name="users.create">Register</x-nav-link>
-                            <x-nav-link name="sessions.create">Login</x-nav-link>
-                        @endguest
-                    </div>
-                </div>
+<body class="min-h-full bg-dark text-white">
+    <div class="p-6">
+        <nav class="flex justify-between items-center border-b-2 border-white/25 py-2">
+            <div>
+                <img loading="lazy" style="width:50px;" src="{{ Vite::asset("resources/images/logo.jpg") }}" alt="logo" />
+            </div>
+            <div>
+                <x-nav-link name="index">Jobs</x-nav-link>
+                <x-nav-link name="jobs.index">Careers</x-nav-link>
+                <x-nav-link name="contact">Salaries</x-nav-link>
+                <x-nav-link name="about">Companies</x-nav-link>
+            </div>
+            <div>
+                <x-nav-link name="about">Post A Job</x-nav-link>
             </div>
         </nav>
 
-        <header class="bg-white shadow-sm">
-            <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900">@yield('title')</h1>
-            </div>
-        </header>
-        <main>
+        <main class="mt-10">
             @if (session('failure'))
                 <div class="flex items-center p-4 m-2 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
                     role="alert">

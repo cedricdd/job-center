@@ -2,14 +2,12 @@
 
 namespace App\View\Components;
 
-use App\Models\Employer;
 use App\Models\Job;
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
-class jobsForm extends Component
+class JobsForm extends Component
 {
     public string $action;
     public Job|null $job;
