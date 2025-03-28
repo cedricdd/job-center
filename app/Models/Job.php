@@ -23,4 +23,9 @@ class Job extends Model
     {
         return $this->belongsToMany(Tag::class, foreignPivotKey: "job_listing_id")->withTimestamps();
     }
+
+    public function url(): string
+    {
+        return route("jobs.show", $this->id);
+    }
 }
