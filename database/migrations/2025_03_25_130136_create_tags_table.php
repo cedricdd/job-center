@@ -19,7 +19,7 @@ return new class extends Migration
 
         Schema::create('job_tag', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("job_listing_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId("job_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId("tag_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });

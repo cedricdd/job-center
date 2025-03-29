@@ -12,8 +12,6 @@ class Job extends Model
     /** @use HasFactory<\Database\Factories\JobFactory> */
     use HasFactory;
 
-    protected $table = "job_listings";
-
     public function employer(): BelongsTo
     {
         return $this->belongsTo(Employer::class);
@@ -21,7 +19,7 @@ class Job extends Model
 
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, foreignPivotKey: "job_listing_id")->withTimestamps();
+        return $this->belongsToMany(Tag::class)->withTimestamps();
     }
 
     public function url(): string

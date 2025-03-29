@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('job_listings', function (Blueprint $table) {
+        Schema::create('jobs', function (Blueprint $table) {
             $table->id();
             $table->string("title");
             $table->string("salary");
+            $table->string("location");
+            $table->string("schedule")->default("Full Time");
+            $table->string("url");
+            $table->boolean("featured")->default(false);
             $table->foreignId("employer_id")->constrained()->onDelete("cascade")->onUpdate("cascade");
             $table->timestamps();
         });
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('job_listings');
+        Schema::dropIfExists('jobs');
     }
 };
