@@ -8,15 +8,5 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
-    --color-custom-dark: #06066;
     --color-dark: #060606;
-
-    --color-gray-900: #202225;
-    --color-gray-800: #2f3136;
-    --color-gray-700: #36393f;
-    --color-gray-600: #4f545c;
-    --color-gray-400: #d4d7dc;
-    --color-gray-300: #e3e5e8;
-    --color-gray-200: #ebedef;
-    --color-gray-100: #f2f3f5;
 }

@@ -1,0 +1,1 @@
+<img class="rounded" src="https://picsum.photos/seed/{{ rand(1, 1000000) }}/{{ $size }}" alt="logo-{{ $size }}">
