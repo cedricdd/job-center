@@ -39,7 +39,7 @@ class JobSeeder extends Seeder
                     ->each(function ($job) use ($tagIDs) {
                         $tagIDs = $tagIDs->shuffle();
     
-                        $job->tags()->attach($tagIDs->slice(0, random_int(1, 5)));
+                        $job->tags()->attach($tagIDs->slice(0, random_int(1, 4)));
                     });
             });
         }

@@ -22,10 +22,10 @@ class UserSeeder extends Seeder
         $john = User::factory()->johnDoe()->has(Employer::factory()->count(random_int(2, 5)), "employers")->create();
 
         $john->employers()->each(function($employer) use ($tagIDs) {
-            $employer->jobs()->saveMany(Job::factory()->count(random_int(10, 30))->make())->each(function ($job) use ($tagIDs) {
-                $tagIDs->shuffle();
+            $employer->jobs()->saveMany(Job::factory()->count(random_int(10, max: 25))->make())->each(function ($job) use ($tagIDs) {
+                $tagIDs = $tagIDs->shuffle();
     
-                $job->tags()->attach($tagIDs->slice(0, random_int(2, 6)));
+                $job->tags()->attach($tagIDs->slice(0, random_int(2, 4)));
             });
         });
     }

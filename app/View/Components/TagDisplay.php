@@ -2,17 +2,17 @@
 
 namespace App\View\Components;
 
-use App\Models\Job;
 use Closure;
-use Illuminate\Contracts\View\View;
+use App\Models\Tag;
 use Illuminate\View\Component;
+use Illuminate\Contracts\View\View;
 
-class JobsDisplayBig extends Component
+class TagDisplay extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct(public Job $job)
+    public function __construct(public Tag $tag)
     {
         //
     }
@@ -22,6 +22,6 @@ class JobsDisplayBig extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.jobs.display-big');
+        return view('components.tag-display');
     }
 }

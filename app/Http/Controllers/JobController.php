@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\JobRequest;
-use App\Jobs\JobCreated;
 use App\Models\Job;
+use App\Models\Tag;
+use App\Jobs\JobCreated;
+use App\Http\Requests\JobRequest;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
 class JobController extends Controller implements HasMiddleware
 {
@@ -27,9 +28,11 @@ class JobController extends Controller implements HasMiddleware
      */
     public function index(): View
     {
-        $jobs = Job::with(["employer", "tags" => fn($query) => $query->orderBy('name', 'ASC')])->latest()->paginate(10);
+        $tags = Tag::all();
+        $jobs = Job::with(["employer", "tags" => fn($query) => $query->orderBy('name', 'ASC')])->limit(10)->latest()->get();
+        $jobsFeatured = Job::with(["employer", "tags" => fn($query) => $query->orderBy('name', 'ASC')])->whereFeatured(true)->limit(6)->latest()->get();
 
-        return view("jobs.index", ["jobs" => $jobs]);
+        return view("jobs.index", compact("jobs", "jobsFeatured", "tags"));
     }
 
     /**
