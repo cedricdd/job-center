@@ -5,4 +5,4 @@
         <option value="{{ $item->id }}" @if($current == $item->id) selected @endif>{{ $item->name }}</option>
     @endforeach
 </select>
-<x-form-error name="{{ $selectName }}" />
+<x-forms.error name="{{ $selectName }}" />

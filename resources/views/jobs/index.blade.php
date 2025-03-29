@@ -15,7 +15,7 @@
 
         <div class="mt-6 flex flex-wrap gap-2 justify-center">
             @foreach ($jobsFeatured as $job)
-                <x-jobs-display-small :$job />
+                <x-jobs.display-small :$job />
             @endforeach
         </div>
     </section>
@@ -35,7 +35,7 @@
 
         <div class="space-y-6 mt-4">
             @foreach ($jobs as $job)
-                <x-jobs-display-big :$job />
+                <x-jobs.display-big :$job />
             @endforeach
         </div>
     </section>

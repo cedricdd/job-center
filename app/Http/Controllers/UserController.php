@@ -27,4 +27,8 @@ class UserController extends Controller
 
         return redirect()->route("index")->with("success", "The user has been successfully created!");
     }
+
+    public function profile() {
+        return view("users.profile");
+    }
 }
