@@ -4,7 +4,9 @@
             <img loading="lazy" src="{{ $employer->logoUrl }}" alt="{{ $employer->name }}-logo">
         </div>
         <div class="flex-1">
-            <h1 class="text-bold text-3xl">{{ $employer->name }}</h1>
+            <h1 class="text-bold text-3xl group-hover:text-blue-600 transition-colors duration-300">
+                <a href="{{ route('employers.show', $employer->id) }}">{{ $employer->name }}</a>
+            </h1>
             <div class="my-4">
                 {{ $employer->description }}
             </div>

@@ -19,8 +19,8 @@
                 <img loading="lazy" style="width:50px;" src="{{ Vite::asset("resources/images/logo.jpg") }}" alt="logo" />
             </a>
             <div>
-                <x-nav-link name="index">Jobs</x-nav-link>
-                <x-nav-link name="jobs.index">Careers</x-nav-link>
+                <x-nav-link name="jobs.index">Jobs</x-nav-link>
+                <x-nav-link name="jobs.index">Featured</x-nav-link>
                 <x-nav-link name="tags.index">Tags</x-nav-link>
                 <x-nav-link name="employers.index">Companies</x-nav-link>
             </div>

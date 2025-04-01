@@ -2,14 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\EmployerController;
-use App\Http\Controllers\TagController;
 
-Route::get('/', [JobController::class, "index"])->name("index");
-Route::view('/about', 'about')->name("about");
-Route::view('/contact', 'contact')->name("contact");
+Route::get('/', [SiteController::class, 'index'])->name("index");
 
 Route::resource("jobs", controller: JobController::class);
 Route::resource("employers", controller: EmployerController::class);

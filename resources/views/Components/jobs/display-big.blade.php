@@ -8,7 +8,7 @@
     @endunless
     <div class="flex-1">
         <p class="text-gray-100">{{ $job->employer->name }}</p>
-        <h1 class="mt-3 font-bold text-2xl">
+        <h1 class="mt-3 font-bold text-2xl group-hover:text-blue-600 transition-colors duration-300">
             <a href="{{ $job->url }}" target="_blank">{{ $job->title }}</a>
         </h1>
         <p class="mt-8">{{ $job->salary }}</p>
