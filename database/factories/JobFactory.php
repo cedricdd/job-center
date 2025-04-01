@@ -16,11 +16,13 @@ class JobFactory extends Factory
      */
     public function definition(): array
     {
+        $randomSchedule = random_int(1, 10);
+
         return [
             "title" => fake()->jobTitle(),
             "salary" => "$" . number_format(fake()->numberBetween(10000, 1000000)) . " USD",
             "location" => random_int(1, 3) == 2 ? fake()->city() : "Remote",
-            "schedule" => random_int(1, 5) == 3 ? "Part Time" : "Full Time",
+            "schedule" => $randomSchedule > 7 ? "Part Time" : ($randomSchedule > 5 ? "Freelance" : "Full Time"),
             "url" => fake()->url(),
             "featured" => random_int(1, 20) == 10 ? true : false,
         ];

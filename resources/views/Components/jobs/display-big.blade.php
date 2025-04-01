@@ -15,7 +15,9 @@
     </div>
     <div class="flex flex-col justify-between items-end">
         <div class="flex gap-2">
-            <div class="rounded border border-white/30 px-2">{{ $job->schedule }}</div>
+            <div class="rounded border border-2 border-white/30 px-2 hover:bg-white/10 hover:boder-white">
+                <a href="{{ route('search') . "/?q=" . urlencode($job->schedule) }}">{{ $job->schedule }}</a>
+            </div>
             <div class="rounded border border-white/30 px-2">{{ $job->location }}</div>
             <div class="rounded border border-white/30 px-2">{{ $job->updated_at->diffForHumans() }}</div>
         </div>

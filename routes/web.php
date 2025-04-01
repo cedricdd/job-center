@@ -22,6 +22,8 @@ Route::delete("logout", [SessionController::class, "destroy"])->name("sessions.d
 
 Route::get("profile", [UserController::class, "profile"])->name("users.profile")->middleware("auth");
 
+Route::get("search", [SiteController::class, "search"])->name("search");
+
 Route::get("tags", [TagController::class, "index"])->name("tags.index");
 Route::get("tags/{tag:name}", [TagController::class, "show"])->name("tags.show");
 

@@ -12,7 +12,7 @@
     @yield('header')
 </head>
 
-<body class="min-h-full bg-dark text-white">
+<body class="min-h-full bg-dark text-white pb-20">
     <div class="p-6">
         <nav class="flex justify-between items-center border-b-2 border-white/25 py-2">
             <a href="{{ route('index') }}">
