@@ -23,4 +23,9 @@ class Employer extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getLogoUrlAttribute(): string
+    {
+        return preg_match("/logos\/.*/", $this->logo) ? asset("storage/" . $this->logo) : $this->logo;
+    }
 }
