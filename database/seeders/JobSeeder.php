@@ -33,9 +33,9 @@ class JobSeeder extends Seeder
         //     }
         // }
         
-        for($i = 0; $i < 10; ++$i) {
+        for($i = 0; $i < 25; ++$i) {
             Employer::factory()->count(random_int(1, 4))->for(User::factory(), "user")->create()->each(function ($employer) use ($tagIDs) {
-                $employer->jobs()->saveMany(Job::factory()->count(random_int(10, max: 20))->make())
+                $employer->jobs()->saveMany(Job::factory()->count(random_int(2, max: 20))->make())
                     ->each(function ($job) use ($tagIDs) {
                         $tagIDs = $tagIDs->shuffle();
     

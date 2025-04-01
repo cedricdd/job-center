@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\RegisterRequest;
 
 class UserController extends Controller
 {
@@ -28,7 +27,12 @@ class UserController extends Controller
         return redirect()->route("index")->with("success", "The user has been successfully created!");
     }
 
-    public function profile() {
+    public function profile(Request $request): View {
+        $request->user()->load(["employers" => fn($query) => $query->withCount("jobs") ]);
+
+        //We need the user info of each employers to check if it belongs to the uesr, we already know that they all do, skip a query
+        $request->user()->employers->transform(fn($employer) => $employer->setRelation('user', $request->user()));
+
         return view("users.profile");
     }
 }

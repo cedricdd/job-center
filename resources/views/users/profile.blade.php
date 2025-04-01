@@ -12,15 +12,15 @@
         <x-forms.input-disabled label="Email" input-name="email" disabled>{{ Auth::user()->email }}</x-forms.input-disabled>
     </div>
 
-    <x-header-title>Your Employers</x-header-title>
+    <x-header-title>Your Companies</x-header-title>
 
     <div class="text-center mb-6">
-        <x-link-button-blue href="{{ route('employers.create') }}">Add An Employer</x-link-button-blue>
+        <x-link-button-blue href="{{ route('employers.create') }}">Add A Company</x-link-button-blue>
     </div>
 
     <div class="space-y-4">
         @foreach (Auth::user()->employers as $employer)
-            <x-employer-card :$employer />
+            <x-employers.card :$employer />
         @endforeach
     </div>
 @endsection

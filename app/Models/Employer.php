@@ -12,6 +12,8 @@ class Employer extends Model
     /** @use HasFactory<\Database\Factories\EmployerFactory> */
     use HasFactory;
 
+    // protected $withCount = ["jobs"];
+
     public function jobs(): HasMany
     {
         return $this->hasMany(Job::class);

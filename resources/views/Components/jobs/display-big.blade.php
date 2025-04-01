@@ -1,6 +1,8 @@
+@props(['job'])
+
 <x-card>
-    <div class="self-center">
-        <x-placeholder-image size="90" />
+    <div class="flex justify-center w-[125px] h-[125px]">
+        <img loading="lazy" src="{{ $job->employer->logo }}" alt="{{ $job->employer->name }}-logo">
     </div>
     <div class="flex-1">
         <p class="text-gray-100">{{ $job->employer->name }}</p>

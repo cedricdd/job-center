@@ -1,4 +1,4 @@
-@props(["size" => "base"])
+@props(["tag", "size" => "base"])
 
 @php
     $classes = "bg-white/15 rounded hover:bg-white/25 cursor-pointer transition-colors duration-300";

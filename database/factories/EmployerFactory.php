@@ -18,7 +18,9 @@ class EmployerFactory extends Factory
     {
         return [
             'name' => fake()->company(),
-            'logo' => "https://picsum.photos/seed/" . rand(1, 1000000) . "/100",
+            'url' => fake()->url(),
+            'description' => fake()->text(500),
+            'logo' => "https://picsum.photos/seed/" . rand(1, 1000000) . "/250",
         ];
     }
 }

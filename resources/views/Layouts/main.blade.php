@@ -22,7 +22,7 @@
                 <x-nav-link name="index">Jobs</x-nav-link>
                 <x-nav-link name="jobs.index">Careers</x-nav-link>
                 <x-nav-link name="contact">Salaries</x-nav-link>
-                <x-nav-link name="about">Companies</x-nav-link>
+                <x-nav-link name="employers.index">Companies</x-nav-link>
             </div>
             <div class="flex items-center gap-1">
                 @auth
@@ -30,7 +30,7 @@
                     <form action="{{ route("sessions.destroy") }}" method="POST" class="inline-block">
                         @csrf
                         @method("DELETE")
-                        <x-forms.button-red>Logout</x-forms.button-red>
+                        <x-forms.button-white>Logout</x-forms.button-white>
                     </form>
                 @endauth
                 @guest

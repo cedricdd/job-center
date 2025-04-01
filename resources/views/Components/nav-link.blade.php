@@ -1,3 +1,5 @@
+@props(["name" => "index"])
+
 @php
     $active = 'bg-white/20 text-white';
     $incative = 'text-gray-300 hover:bg-white/30 hover:text-white';

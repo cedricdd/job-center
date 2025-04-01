@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string("salary");
             $table->string("location");
             $table->string("schedule")->default("Full Time");
-            $table->string("url");
+            $table->string("url", 2024);
             $table->boolean("featured")->default(false);
             $table->foreignId("employer_id")->constrained()->onDelete("cascade")->onUpdate("cascade");
             $table->timestamps();

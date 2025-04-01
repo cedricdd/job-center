@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('employers', function (Blueprint $table) {
             $table->id();
             $table->string("name");
+            $table->string("url", 2024);
+            $table->text("description");
             $table->string("logo");
             $table->foreignId("user_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();

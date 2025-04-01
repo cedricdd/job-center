@@ -35,7 +35,7 @@ class SessionController extends Controller
 
         Session::regenerate();
 
-        return redirect()->route("jobs.index")->with("success", "You have been successfully logged in!");
+        return redirect()->route("users.profile", Auth::user()->id)->with("success", "You have been successfully logged in!");
     }
 
     public function destroy(): RedirectResponse {
