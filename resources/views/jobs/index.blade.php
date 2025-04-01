@@ -5,8 +5,8 @@
 @section('content')
     <section class="text-center mb-30">
         <h1 class="text-3xl mb-4">Find Your Next Job</h1>
-        <form action="" class="mp-6">
-            <input type="text" placeholder="Web Developper" class="bg-white/10 border border-white/20 px-6 py-3 rounded-xl w-full max-w-2xl" />
+        <form action="" class="mp-6 flex justify-center" method="GET">
+            <x-forms.input input-name="q" placeholder="Web Developper" class="!bg-white/10 !border-white/20 !text-white px-6 py-3 rounded-xl w-full max-w-2xl" />
         </form>
     </section>
 
@@ -25,7 +25,7 @@
 
         <div class="flex flex-wrap gap-2 mt-4 text-center">
             @foreach ($tags as $tag)
-                <x-tag-display :$tag class="flex-1" />
+                <x-tag-display :$tag class="flex-1" title="Currently {{ $tag->jobs_count }} Jobs" />
             @endforeach
         </div>
     </section>

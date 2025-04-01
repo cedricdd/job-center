@@ -15,13 +15,13 @@
 <body class="min-h-full bg-dark text-white">
     <div class="p-6">
         <nav class="flex justify-between items-center border-b-2 border-white/25 py-2">
-            <div>
+            <a href="{{ route('index') }}">
                 <img loading="lazy" style="width:50px;" src="{{ Vite::asset("resources/images/logo.jpg") }}" alt="logo" />
-            </div>
+            </a>
             <div>
                 <x-nav-link name="index">Jobs</x-nav-link>
                 <x-nav-link name="jobs.index">Careers</x-nav-link>
-                <x-nav-link name="contact">Salaries</x-nav-link>
+                <x-nav-link name="tags.index">Tags</x-nav-link>
                 <x-nav-link name="employers.index">Companies</x-nav-link>
             </div>
             <div class="flex items-center gap-1">

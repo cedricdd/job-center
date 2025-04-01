@@ -5,6 +5,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\EmployerController;
+use App\Http\Controllers\TagController;
 
 Route::get('/', [JobController::class, "index"])->name("index");
 Route::view('/about', 'about')->name("about");
@@ -21,5 +22,8 @@ Route::post("login", [SessionController::class, "store"])->name("sessions.store"
 Route::delete("logout", [SessionController::class, "destroy"])->name("sessions.destroy")->middleware('auth');
 
 Route::get("profile", [UserController::class, "profile"])->name("users.profile")->middleware("auth");
+
+Route::get("tags", [TagController::class, "index"])->name("tags.index");
+Route::get("tags/{tag:name}", [TagController::class, "show"])->name("tags.show");
 
 Route::fallback(fn() => redirect()->route("index"));

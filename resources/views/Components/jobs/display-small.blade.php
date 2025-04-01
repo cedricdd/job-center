@@ -3,7 +3,9 @@
 <x-card size="small">
     <div class="self-start">{{ $job->employer->name }}</div>
     <div class="my-8">
-        <h3 class="text-xl group-hover:text-blue-600">{{ $job->title }}</h3>
+        <h3 class="text-xl group-hover:text-blue-600">
+            <a href="{{ $job->url }}" target="_blank">{{ $job->title }}</a>
+        </h3>
         <p class="text-sm mt-4">{{ $job->salary }}</p>
     </div>
     <div class="inline-flex justify-between items-center mt-auto">
@@ -13,7 +15,7 @@
             @endforeach
         </div>
         <div class="w-[60px] h-[60px]">
-            <img loading="lazy" src="{{ $job->employer->logo }}" alt="{{ $job->employer->name }}-logo">
+            <img loading="lazy" src="{{ $job->employer->logoUrl }}" alt="{{ $job->employer->name }}-logo">
         </div>
     </div>
 </x-card>

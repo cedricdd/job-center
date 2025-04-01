@@ -3,12 +3,14 @@
 <x-card>
     @unless ($hideLogo)
     <div class="flex justify-center w-[125px] h-[125px]">
-        <img loading="lazy" src="{{ $job->employer->logo }}" alt="{{ $job->employer->name }}-logo">
+        <img loading="lazy" src="{{ $job->employer->logoUrl }}" alt="{{ $job->employer->name }}-logo">
     </div>
     @endunless
     <div class="flex-1">
         <p class="text-gray-100">{{ $job->employer->name }}</p>
-        <h1 class="mt-3 font-bold text-2xl">{{ $job->title }}</h1>
+        <h1 class="mt-3 font-bold text-2xl">
+            <a href="{{ $job->url }}" target="_blank">{{ $job->title }}</a>
+        </h1>
         <p class="mt-8">{{ $job->salary }}</p>
     </div>
     <div class="flex flex-col justify-between items-end">
