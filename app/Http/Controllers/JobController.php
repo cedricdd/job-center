@@ -54,14 +54,16 @@ class JobController extends Controller implements HasMiddleware
         $job->url = $request->input("url");
         $job->employer()->associate($request->input("employer_id"))->save();
 
-        $tagIDs = [];
+        if(!empty($request->input("tags"))) {
+            $tagIDs = [];
 
-        foreach(explode(",", $request->input("tags")) as $tag) {
-            $tag = Tag::firstOrCreate(["name" => ucwords(trim($tag))]);
-            $tagIDs[] = $tag->id;
+            foreach(explode(",", $request->input("tags")) as $tag) {
+                $tag = Tag::firstOrCreate(["name" => ucwords(trim($tag))]);
+                $tagIDs[] = $tag->id;
+            }
+    
+            if($tagIDs) $job->tags()->attach($tagIDs); //Only run one query to attach all the tags
         }
-
-        if($tagIDs) $job->tags()->attach($tagIDs); //Only run one query to attach all the tags
 
         JobCreated::dispatch(Auth::user(), $job);
 

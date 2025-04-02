@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Constants;
+use App\Rules\OwnerEmployer;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -29,8 +30,8 @@ class JobRequest extends FormRequest
             "location" => "required|string|max:255",
             "url" => "required|active_url",
             "schedule" => ["required", "string", Rule::in(Constants::SCHEDULES)],
-            "employer_id" => "required|integer|exists:employers,id",
-            "tags" => "string",
+            "employer_id" => ["required", "integer", new OwnerEmployer],
+            "tags" => "nullable|string",
         ];
     }
 }
