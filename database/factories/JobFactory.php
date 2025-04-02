@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Constants;
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,13 +18,11 @@ class JobFactory extends Factory
      */
     public function definition(): array
     {
-        $randomSchedule = random_int(1, 10);
-
         return [
             "title" => fake()->jobTitle(),
             "salary" => "$" . number_format(fake()->numberBetween(10000, 1000000)) . " USD",
             "location" => random_int(1, 3) == 2 ? fake()->city() : "Remote",
-            "schedule" => $randomSchedule > 7 ? "Part Time" : ($randomSchedule > 5 ? "Freelance" : "Full Time"),
+            "schedule" => Arr::random(Constants::SCHEDULES),
             "url" => fake()->url(),
             "featured" => random_int(1, 20) == 10 ? true : false,
         ];

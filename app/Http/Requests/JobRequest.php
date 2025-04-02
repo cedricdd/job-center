@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Constants;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class JobRequest extends FormRequest
@@ -22,9 +24,13 @@ class JobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "title" => "bail|required|string|max:255|min:3",
-            "salary" => "bail|required|string|max:255|min:3",
-            "employer_id" => "bail|required|integer|exists:employers,id",
+            "title" => "required|string|max:255|min:3",
+            "salary" => "required|string|max:255|min:3",
+            "location" => "required|string|max:255",
+            "url" => "required|active_url",
+            "schedule" => ["required", "string", Rule::in(Constants::SCHEDULES)],
+            "employer_id" => "required|integer|exists:employers,id",
+            "tags" => "string",
         ];
     }
 }

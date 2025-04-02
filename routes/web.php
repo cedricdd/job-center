@@ -10,7 +10,8 @@ use App\Http\Controllers\EmployerController;
 
 Route::get('/', [SiteController::class, 'index'])->name("index");
 
-Route::resource("jobs", controller: JobController::class);
+Route::get("jobs/create/{employer_id?}", [JobController::class, "create"])->name("jobs.create")->middleware('auth')->where('employer_id', '[0-9]+');
+Route::resource("jobs", controller: JobController::class)->except('create');
 Route::resource("employers", controller: EmployerController::class);
 
 Route::get("register", [UserController::class, "create"])->name("users.create")->middleware('guest');

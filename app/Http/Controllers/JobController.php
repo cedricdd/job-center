@@ -18,7 +18,7 @@ class JobController extends Controller implements HasMiddleware
     {
         return [
             new Middleware('auth', except: ['index', 'show']),
-            new Middleware('can:edit,job', only: ['edit', 'update']),
+            new Middleware('can:update,job', only: ['edit', 'update']),
             new Middleware('can:destroy,job', only: ['destroy']),
         ];
     }
@@ -36,9 +36,9 @@ class JobController extends Controller implements HasMiddleware
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create(?int $employerID = 0): View
     {
-        return view("jobs.create");
+        return view("jobs.create", compact('employerID'));
     }
 
     /**
@@ -49,7 +49,19 @@ class JobController extends Controller implements HasMiddleware
         $job = new Job();
         $job->title = $request->input("title");
         $job->salary = $request->input("salary");
+        $job->location = $request->input("location");
+        $job->schedule = $request->input("schedule");
+        $job->url = $request->input("url");
         $job->employer()->associate($request->input("employer_id"))->save();
+
+        $tagIDs = [];
+
+        foreach(explode(",", $request->input("tags")) as $tag) {
+            $tag = Tag::firstOrCreate(["name" => ucwords(trim($tag))]);
+            $tagIDs[] = $tag->id;
+        }
+
+        if($tagIDs) $job->tags()->attach($tagIDs); //Only run one query to attach all the tags
 
         JobCreated::dispatch(Auth::user(), $job);
 

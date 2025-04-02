@@ -26,7 +26,7 @@ class EmployerRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|min:10',
-            'url' => 'required|url',
+            'url' => 'required|active_url',
             'logo' => [
                 'image', 
                 'mimes:jpg,png,webp', 

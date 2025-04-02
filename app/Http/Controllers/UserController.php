@@ -28,7 +28,7 @@ class UserController extends Controller
     }
 
     public function profile(Request $request): View {
-        $request->user()->load(["employers" => fn($query) => $query->withCount("jobs") ]);
+        $request->user()->load(["employers" => fn($query) => $query->withCount("jobs")->orderBy("name") ]);
 
         //We need the user info of each employers to check if it belongs to the uesr, we already know that they all do, skip a query
         $request->user()->employers->transform(fn($employer) => $employer->setRelation('user', $request->user()));

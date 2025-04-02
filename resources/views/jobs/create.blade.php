@@ -4,6 +4,6 @@
 
 @section('content')
 
-    <x-jobs-form action="Create" />
+    <x-jobs.form action="Create" :$employerID />
 
 @endsection
