@@ -18,7 +18,7 @@ class EmployerController extends Controller implements HasMiddleware
     {
         return [
             new Middleware('auth', except: ['index', 'show']),
-            new Middleware('can:edit,employer', only: ['edit', 'update']),
+            new Middleware('can:update,employer', only: ['edit', 'update']),
             new Middleware('can:destroy,employer', only: ['destroy']),
         ];
     }

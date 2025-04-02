@@ -10,7 +10,7 @@ class JobPolicy
     /**
      * Determine whether the user can edit the model.
      */
-    public function edit(User $user, Job $job): bool
+    public function update(User $user, Job $job): bool
     {
         return $job->employer->user->is($user);
     }

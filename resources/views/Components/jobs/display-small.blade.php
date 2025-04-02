@@ -1,7 +1,9 @@
 @props(['job'])
 
 <x-card size="small">
-    <div class="self-start">{{ $job->employer->name }}</div>
+    <div class="self-start">
+        <a href="{{ route('employers.show', $job->employer->id) }}">{{ $job->employer->name }}</a>
+    </div>
     <div class="my-8">
         <h3 class="text-xl group-hover:text-blue-600">
             <a href="{{ $job->url }}" target="_blank">{{ $job->title }}</a>

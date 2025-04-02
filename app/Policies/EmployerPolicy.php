@@ -11,7 +11,7 @@ class EmployerPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function edit(User $user, Employer $employer): bool
+    public function update(User $user, Employer $employer): bool
     {
         return $employer->user->is($user);
     }
@@ -19,7 +19,7 @@ class EmployerPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Employer $employer): bool
+    public function destroy(User $user, Employer $employer): bool
     {
         return $employer->user->is($user);
     }
