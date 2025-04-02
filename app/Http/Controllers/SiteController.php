@@ -37,6 +37,8 @@ class SiteController extends Controller
         $jobs = $jobs->latest()->paginate(15);
         $jobs->appends(["q" => $term]);
 
-        return view("jobs.index", compact("jobs"));
+        $title = "Jobs Listed for " . $term;
+
+        return view("jobs.index", compact("jobs", "title"));
     }
 }

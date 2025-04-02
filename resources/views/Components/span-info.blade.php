@@ -1,0 +1,1 @@
+<span {{ $attributes->merge(['class' => "rounded border border-2 border-white/30 px-2 hover:bg-white/10 hover:boder-white"]) }}>{{ $slot }}</span>

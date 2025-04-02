@@ -95,7 +95,21 @@ class JobController extends Controller implements HasMiddleware
     {
         $job->title = $request->input("title");
         $job->salary = $request->input("salary");
+        $job->location = $request->input("location");
+        $job->schedule = $request->input("schedule");
+        $job->url = $request->input("url");
         $job->employer()->associate($request->input("employer_id"))->save();
+
+        $tagIDs = [];
+
+        if(!empty($request->input("tags"))) {
+            foreach(explode(",", $request->input("tags")) as $tag) {
+                $tag = Tag::firstOrCreate(["name" => ucwords(trim($tag))]);
+                $tagIDs[] = $tag->id;
+            }
+        }
+
+        $job->tags()->sync($tagIDs); 
 
         return redirect()->route("jobs.show", $job->id)->with("success", "The job $job->title was successfully updated!");
     }

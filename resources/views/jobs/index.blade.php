@@ -1,9 +1,9 @@
 @extends('layouts.main')
 
-@section('title', 'Jobs List')
+@section('title', $title ?? "Jobs List")
 
 @section('content')
-    <x-header-title>Jobs List</x-header-title>
+    <x-header-title>{{ $title ?? "Jobs List" }}</x-header-title>
 
     <div class="space-y-6 mt-4">
         @foreach ($jobs as $job)

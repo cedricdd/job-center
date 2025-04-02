@@ -3,5 +3,5 @@
 @section("title", $job->title)
 
 @section("content")
-    <x-jobs-display :$job />
+    <x-jobs.display :$job />
 @endsection

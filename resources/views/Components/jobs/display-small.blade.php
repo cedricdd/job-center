@@ -6,7 +6,7 @@
     </div>
     <div class="my-8">
         <h3 class="text-xl group-hover:text-blue-600">
-            <a href="{{ $job->url }}" target="_blank">{{ $job->title }}</a>
+            <a href="{{ route('jobs.show', $job->id) }}">{{ $job->title }}</a>
         </h3>
         <p class="text-sm mt-4">{{ $job->salary }}</p>
     </div>
