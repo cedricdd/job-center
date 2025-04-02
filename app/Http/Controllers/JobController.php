@@ -28,7 +28,10 @@ class JobController extends Controller implements HasMiddleware
      */
     public function index(): View
     {
-        $jobs = Job::with(["employer", "tags" => fn($query) => $query->orderBy('name', 'ASC')])->latest()->paginate(15);
+        $jobs = Job::with([
+            "employer" => fn($query) => $query->with("user"), 
+            "tags" => fn($query) => $query->orderBy('name', 'ASC')
+        ])->latest()->paginate(15);
 
         return view("jobs.index", compact("jobs"));
     }

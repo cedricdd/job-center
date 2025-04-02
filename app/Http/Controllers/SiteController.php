@@ -13,8 +13,16 @@ class SiteController extends Controller
     public function index(): View
     {
         $tags = Tag::mostUsed()->limit(20)->get();
-        $jobs = Job::with(["employer", "tags" => fn($query) => $query->orderBy('name', 'ASC')])->limit(10)->latest()->get();
-        $jobsFeatured = Job::with(["employer", "tags" => fn($query) => $query->orderBy('name', 'ASC')])->whereFeatured(true)->limit(6)->latest()->get();
+
+        $jobs = Job::with([
+            "employer" => fn($query) => $query->with("user"), 
+            "tags" => fn($query) => $query->orderBy('name', 'ASC')
+        ])->limit(10)->latest()->get();
+
+        $jobsFeatured = Job::with([
+            "employer" => fn($query) => $query->with("user"), 
+            "tags" => fn($query) => $query->orderBy('name', 'ASC')
+        ])->whereFeatured(true)->limit(6)->latest()->get();
 
         return view("index", compact("jobs", "jobsFeatured", "tags"));
     }

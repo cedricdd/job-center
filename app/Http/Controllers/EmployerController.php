@@ -28,7 +28,7 @@ class EmployerController extends Controller implements HasMiddleware
      */
     public function index(): View
     {
-        $employers = Employer::with("user")->withCount("jobs")->orderBy("name", "ASC")->where("jobs_count", ">", 0)->paginate(20);
+        $employers = Employer::with("user")->withCount("jobs")->orderBy("name", "ASC")->having("jobs_count", ">", 0)->paginate(20);
 
         return view("employers.index", compact('employers'));
     }
