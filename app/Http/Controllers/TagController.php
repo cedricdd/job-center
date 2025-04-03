@@ -23,4 +23,31 @@ class TagController extends Controller
 
         return view("tags.show", compact("tag", 'jobs'));
     }
+
+    public function autocomplete(Request $request): array
+    {
+        $fixedPart = "";
+        $term = trim($request->input("term", ''));
+
+        if (strlen($term) < 2) {
+            return [];
+        }
+
+        $terms = explode(",", $term);
+        $terms = array_map('trim', $terms);
+
+        $tags = Tag::select("id", "name")->where("name", "LIKE", "%" . array_pop($terms) . "%")->get();
+
+        $fixedPart = implode(", ", $terms);
+        $results = [];
+
+        foreach ($tags as $tag) {
+            $results[] = [
+                "label" => $tag->name,
+                "value" => ($fixedPart ? ($fixedPart . ", ") : "") . $tag->name,
+            ];
+        }
+
+        return $results;
+    }
 }

@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     @vite(['resources/js/app.js'])
 
     <title>@yield('title')</title>
 
-    @yield('header')
+    @stack('header')
 </head>
 
 <body class="min-h-full bg-dark text-white pb-20">
@@ -50,7 +51,7 @@
         </main>
     </div>
 
-    @yield('footer')
+    @stack('footer')
 </body>
 
 </html>
