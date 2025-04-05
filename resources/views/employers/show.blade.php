@@ -33,10 +33,12 @@
     <div class="mt-20">
         <h2 class="text-3xl font-bold text-center mb-4">Jobs List</h2>
 
+        <x-nav-jobs-sorting />
+
         @if ($employer->jobs_count == 0)
             <p class="text-center text-gray-500">No jobs available</p>
         @else
-            <div class="space-y-4">
+            <div class="mt-4 space-y-4">
                 @foreach ($jobs as $job)
                     <x-jobs.display-big :$job :hideLogo="true" />
                 @endforeach

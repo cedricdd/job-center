@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants;
 use App\Models\Job;
 use App\Models\Employer;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class EmployerController extends Controller implements HasMiddleware
             new Middleware('auth', except: ['index', 'show']),
             new Middleware('can:update,employer', only: ['edit', 'update']),
             new Middleware('can:destroy,employer', only: ['destroy']),
+            new Middleware('jobSorting', only: ['show']),
         ];
     }
 
@@ -61,11 +63,11 @@ class EmployerController extends Controller implements HasMiddleware
     /**
      * Display the specified resource.
      */
-    public function show(Employer $employer): View
+    public function show(Employer $employer, string $jobSorting): View
     {
         $employer->loadCount("jobs")->with("user");
 
-        $jobs = $employer->jobs()->with(['tags'])->orderBy("created_at", "DESC")->paginate(10, total: $employer->jobs_count);
+        $jobs = $employer->jobs()->with(['tags'])->orderByRaw(Constants::JOB_SORTING[$jobSorting]['order'])->paginate(10, total: $employer->jobs_count);
 
         $jobs->transform(fn (Job $job): Job => $job->setRelation('employer', $employer));
 

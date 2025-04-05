@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
@@ -15,11 +16,11 @@ class TagController extends Controller
         return view("tags.index", compact('tags'));
     }
 
-    public function show(Tag $tag): View
+    public function show(Tag $tag, string $jobSorting): View
     {
         $tag->loadCount("jobs");
 
-        $jobs = $tag->jobs()->with(['tags', 'employer'])->orderBy("created_at", "DESC")->paginate(10);
+        $jobs = $tag->jobs()->with(['tags', 'employer'])->orderByRaw(Constants::JOB_SORTING[$jobSorting]["order"])->paginate(10);
 
         return view("tags.show", compact("tag", 'jobs'));
     }

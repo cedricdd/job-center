@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants;
 use App\Models\Job;
 use App\Models\Tag;
 use App\Jobs\JobCreated;
+use Illuminate\Http\Request;
 use App\Http\Requests\JobRequest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -20,18 +22,19 @@ class JobController extends Controller implements HasMiddleware
             new Middleware('auth', except: ['index', 'show']),
             new Middleware('can:update,job', only: ['edit', 'update']),
             new Middleware('can:destroy,job', only: ['destroy']),
+            new Middleware('jobSorting', only: ['index']),
         ];
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(string $jobSorting): View
     {
         $jobs = Job::with([
             "employer" => fn($query) => $query->with("user"), 
             "tags" => fn($query) => $query->orderBy('name', 'ASC')
-        ])->latest()->paginate(15);
+        ])->orderByRaw(Constants::JOB_SORTING[$jobSorting]['order'])->paginate(15);
 
         return view("jobs.index", compact("jobs"));
     }
@@ -125,5 +128,18 @@ class JobController extends Controller implements HasMiddleware
         $job->delete();
 
         return redirect()->route("jobs.index")->with("success", "The job $job->title was successfully deleted!");
+    }
+
+    public function sorting(Request $request): RedirectResponse
+    {
+        $sorting = $request->input("sort", Constants::JOB_SORTING_DEFAULT);
+
+        if(isset(Constants::JOB_SORTING[$sorting])) {
+            $request->session()->put("sort", $sorting);
+        } else {
+            $request->session()->forget("sort");
+        }
+
+        return redirect()->back();
     }
 }
