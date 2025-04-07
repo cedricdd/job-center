@@ -122,17 +122,4 @@ class EmployerController extends Controller implements HasMiddleware
 
         return redirect()->route("users.profile", $request->user()->id)->with("success", "The employer {$employer->name} was successfully deleted!");
     }
-
-    public function sorting(Request $request): RedirectResponse
-    {
-        $sorting = $request->input("sort", Constants::EMPLOYER_SORTING_DEFAULT);
-
-        if (isset(Constants::EMPLOYER_SORTING[$sorting])) {
-            $request->session()->put("employer-sorting", $sorting);
-        } else {
-            $request->session()->forget("employer-sorting");
-        }
-
-        return redirect()->back();
-    }
 }

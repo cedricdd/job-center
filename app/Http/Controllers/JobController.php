@@ -129,17 +129,4 @@ class JobController extends Controller implements HasMiddleware
 
         return redirect()->route("jobs.index")->with("success", "The job $job->title was successfully deleted!");
     }
-
-    public function sorting(Request $request): RedirectResponse
-    {
-        $sorting = $request->input("sort", Constants::JOB_SORTING_DEFAULT);
-
-        if(isset(Constants::JOB_SORTING[$sorting])) {
-            $request->session()->put("job-sorting", $sorting);
-        } else {
-            $request->session()->forget("job-sorting");
-        }
-
-        return redirect()->back();
-    }
 }

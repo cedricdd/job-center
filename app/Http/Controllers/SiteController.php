@@ -7,6 +7,7 @@ use App\Models\Job;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class SiteController extends Controller
 {
@@ -48,5 +49,29 @@ class SiteController extends Controller
         $title = "Jobs Listed for " . $term;
 
         return view("jobs.index", compact("jobs", "title"));
+    }
+
+    public function sorting(Request $request, string $type): RedirectResponse
+    {
+        if($type == "job") {
+            $sorting = $request->input("sorting", Constants::JOB_SORTING_DEFAULT);
+
+            if (isset(Constants::JOB_SORTING[$sorting])) {
+                $request->session()->put("job-sorting", $sorting);
+            } else {
+                $request->session()->forget("job-sorting");
+            }
+        } elseif ($type == "employer") {
+            $sorting = $request->input("sorting", Constants::EMPLOYER_SORTING_DEFAULT);
+
+            if (isset(Constants::EMPLOYER_SORTING[$sorting])) {
+                $request->session()->put("employer-sorting", $sorting);
+            } else {
+                $request->session()->forget("employer-sorting");
+            }
+        }
+        else abort(404);
+
+        return redirect()->back();
     }
 }

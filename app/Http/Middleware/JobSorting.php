@@ -22,7 +22,7 @@ class JobSorting
         if (!array_key_exists($sorting, Constants::JOB_SORTING)) {
             session(["job-sorting" => Constants::JOB_SORTING_DEFAULT]);
 
-            $sorting = session("job-sorting", Constants::JOB_SORTING_DEFAULT);
+            $sorting = Constants::JOB_SORTING_DEFAULT;
         }
 
         //We add the sorting as a route parameter to have it easily accessible in the controllers

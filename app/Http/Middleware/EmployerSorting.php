@@ -18,10 +18,11 @@ class EmployerSorting
     {
         $sorting = session("employer-sorting");
 
+        //Invalid sorting, switch to default
         if(!array_key_exists($sorting, Constants::EMPLOYER_SORTING)) {
             session(["employer-sorting" => Constants::EMPLOYER_SORTING_DEFAULT]);
 
-            $sorting = session("employer-sorting", Constants::EMPLOYER_SORTING_DEFAULT);
+            $sorting = Constants::EMPLOYER_SORTING_DEFAULT;
         }
 
         $request->route()->setParameter('employerSorting', $sorting);
