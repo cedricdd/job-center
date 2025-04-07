@@ -21,7 +21,7 @@
             </a>
             <div>
                 <x-nav-link name="jobs.index">Jobs</x-nav-link>
-                <x-nav-link name="jobs.index">Featured</x-nav-link>
+                <x-nav-link name="jobs.featured">Featured</x-nav-link>
                 <x-nav-link name="tags.index">Tags</x-nav-link>
                 <x-nav-link name="employers.index">Companies</x-nav-link>
             </div>

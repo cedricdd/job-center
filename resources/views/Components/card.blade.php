@@ -7,4 +7,4 @@
 @endphp
 
 
-<div class="{{ $classes }}">{{ $slot }}</div>
+<div {{ $attributes->merge(['class' => $classes]) }}">{{ $slot }}</div>

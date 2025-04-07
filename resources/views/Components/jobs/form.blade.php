@@ -32,12 +32,13 @@
     <div class="mb-5">
         <x-forms.select select-name="employer_id" label="Select Employer" :items="Auth::user()->employers->pluck('name', 'id')" :current="$job?->employer->id ?? $employerID" />
     </div>
+    <div class="mb-5">
+        <x-forms.checkbox input-name="featured" label="Featured Job (You should pay for that but it's just a test project)" :checked="old('featured', $job?->featured)" />
+    </div>
     <div class="flex justify-between gap-2">
         <x-link-button-white href="{{ route('jobs.index') }}">Cancel</x-link-button-white>
         <x-forms.button-blue>{{ $action }}</x-forms.button-blue>
     </div>
-
-    {{-- $table->boolean("featured")->default(false); --}}
 </form>
 
 @push('header')

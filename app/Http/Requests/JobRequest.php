@@ -32,6 +32,7 @@ class JobRequest extends FormRequest
             "schedule" => ["required", "string", Rule::in(Constants::SCHEDULES)],
             "employer_id" => ["required", "integer", new OwnerEmployer],
             "tags" => "nullable|string",
+            "featured" => "nullable|boolean",
         ];
     }
 }

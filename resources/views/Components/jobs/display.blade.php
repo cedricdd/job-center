@@ -1,16 +1,18 @@
 <div class="block px-4 py-6 border border-gray-200 rounded-lg my-2">
 
-    <a href="{{ route('employers.show', $job->employer->id) }}" class="flex gap-x-2 items-center">
-        <div class="w-[125px] h-[125px]">
-            <img src="{{ $job->employer->logoUrl }}" alt="{{ $job->employer->name }}-logo">
+    <div class="flex items-center gap-x-4 p-2 border-b-2 border-white/25">
+        <a href="{{ route('employers.show', $job->employer->id) }}" class="flex flex-col items-center gap-y-2 max-w-[175px]">
+            <div class="text-2xl text-center">{{ $job->employer->name }}</div>
+            <div class="w-[125px] h-[125px]">
+                <img src="{{ $job->employer->logoUrl }}" alt="{{ $job->employer->name }}-logo">
+            </div>
+        </a>
+        <div class="flex-1 text-center">
+            <span class="text-6xl">{{ $job->title }}</span>
         </div>
-        <div class="text-4xl">{{ $job->employer->name }}</div>
-    </a>
+    </div>
 
     <div class="flex justify-between my-4">
-        <div>
-            <span class="text-2xl">{{ $job->title }}</span>
-        </div>
         <div>
             <x-span-info>{{ $job->salary }}</x-span-info>
             <x-span-info>
@@ -21,13 +23,13 @@
         <x-link-button-white href="{{ $job->url }}">More Infos</x-link-button-white>
     </div>
 
-    <div class="mt-2 flex flex-wrap gap-2 items-center justify-start">
+    <div class="mt-2 inline-flex flex-wrap gap-2 items-center justify-start">
         @foreach ($job->tags as $tag)
             <x-tag-display :$tag />
         @endforeach
     </div>
 
-    <div class="flex justify-end gap-2">
+    <div class="flex justify-end gap-2 mt-2">
         @can('destroy', $job)
             <form action="{{ route('jobs.destroy', $job->id) }}" method="POST">
                 @csrf

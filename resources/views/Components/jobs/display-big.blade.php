@@ -1,6 +1,6 @@
 @props(['job', 'hideLogo' => false])
 
-<x-card>
+<x-card :class="$job->featured ? '!border-yellow-600' : ''">
     @unless ($hideLogo)
         <div class="flex justify-center w-[125px] h-[125px]">
             <a href="{{ route('employers.show', $job->employer->id) }}">

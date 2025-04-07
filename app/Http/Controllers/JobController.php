@@ -34,7 +34,11 @@ class JobController extends Controller implements HasMiddleware
         $jobs = Job::with([
             "employer" => fn($query) => $query->with("user"), 
             "tags" => fn($query) => $query->orderBy('name', 'ASC')
-        ])->orderByRaw(Constants::JOB_SORTING[$jobSorting]['order'])->paginate(15);
+        ])->orderByRaw(Constants::JOB_SORTING[$jobSorting]['order'])
+        ->when(request()->route()->getName() == "jobs.featured", function($query) {
+            $query->where("featured", true);
+        })
+        ->paginate(15);
 
         return view("jobs.index", compact("jobs"));
     }
@@ -58,6 +62,7 @@ class JobController extends Controller implements HasMiddleware
         $job->location = $request->input("location");
         $job->schedule = $request->input("schedule");
         $job->url = $request->input("url");
+        $job->featured = $request->input("featured", false);
         $job->employer()->associate($request->input("employer_id"))->save();
 
         if(!empty($request->input("tags"))) {
@@ -104,6 +109,7 @@ class JobController extends Controller implements HasMiddleware
         $job->location = $request->input("location");
         $job->schedule = $request->input("schedule");
         $job->url = $request->input("url");
+        $job->featured = $request->input("featured", false);
         $job->employer()->associate($request->input("employer_id"))->save();
 
         $tagIDs = [];
