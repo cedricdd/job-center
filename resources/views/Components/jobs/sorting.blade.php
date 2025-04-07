@@ -1,7 +1,7 @@
 @props(['name'])
 
 @php
-    $active = Session::get('sort', 'newest') == $name;
+    $active = Session::get('job-sorting', 'newest') == $name;
 @endphp
 
 <form action="{{ route('jobs.sorting') }}" method="POST">

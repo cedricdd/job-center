@@ -16,13 +16,13 @@ class JobSorting
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $jobSorting = session("sort");
+        $jobSorting = session("job-sorting");
 
         //Invalid sorting, switch to default
         if (!array_key_exists($jobSorting, Constants::JOB_SORTING)) {
-            session(["sort" => Constants::JOB_SORTING_DEFAULT]);
+            session(["job-sorting" => Constants::JOB_SORTING_DEFAULT]);
 
-            $jobSorting = session("sort", Constants::JOB_SORTING_DEFAULT);
+            $jobSorting = session("job-sorting", Constants::JOB_SORTING_DEFAULT);
         }
 
         //We add the sorting as a route parameter to have it easily accessible in the controllers

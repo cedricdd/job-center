@@ -19,7 +19,7 @@ class JobController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('auth', except: ['index', 'show']),
+            new Middleware('auth', except: ['index', 'show', 'sorting']),
             new Middleware('can:update,job', only: ['edit', 'update']),
             new Middleware('can:destroy,job', only: ['destroy']),
             new Middleware('jobSorting', only: ['index']),
@@ -135,9 +135,9 @@ class JobController extends Controller implements HasMiddleware
         $sorting = $request->input("sort", Constants::JOB_SORTING_DEFAULT);
 
         if(isset(Constants::JOB_SORTING[$sorting])) {
-            $request->session()->put("sort", $sorting);
+            $request->session()->put("job-sorting", $sorting);
         } else {
-            $request->session()->forget("sort");
+            $request->session()->forget("job-sorting");
         }
 
         return redirect()->back();
