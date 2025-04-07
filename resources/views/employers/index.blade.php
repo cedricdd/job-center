@@ -5,7 +5,9 @@
 @section('content')
     <x-header-title>Every Companies</x-header-title>
 
-    <div class="space-y-6">
+    <x-nav-sorting type="employers" />
+
+    <div class="space-y-6 mt-4">
         @foreach ($employers as $employer)
             <x-employers.card :$employer />
         @endforeach

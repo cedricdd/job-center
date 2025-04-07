@@ -15,6 +15,7 @@ Route::resource("jobs", controller: JobController::class)->except('create');
 Route::post("jobs/sorting", [JobController::class, "sorting"])->name("jobs.sorting");
 
 Route::resource("employers", controller: EmployerController::class);
+Route::post("employers/sorting", [EmployerController::class, "sorting"])->name("employers.sorting");
 
 Route::get("register", [UserController::class, "create"])->name("users.create")->middleware('guest');
 Route::post("register", [UserController::class, "store"])->name("users.store")->middleware('guest');

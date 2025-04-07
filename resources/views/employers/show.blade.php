@@ -33,7 +33,7 @@
     <div class="mt-20">
         <h2 class="text-3xl font-bold text-center mb-4">Jobs List</h2>
 
-        <x-nav-jobs-sorting />
+        <x-nav-sorting type="jobs" />
 
         @if ($employer->jobs_count == 0)
             <p class="text-center text-gray-500">No jobs available</p>

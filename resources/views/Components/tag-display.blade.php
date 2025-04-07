@@ -13,7 +13,7 @@
     <div class="flex justify-between items-center w-full">
         <span>{{ $tag->name }}</span>
         @isset($tag->jobs_count)
-        <span class="ml-4">({{ $tag->jobs_count . " " . Str::of('Job')->plural($tag->jobs_count) }})</span>
+        <span class="ml-4 whitespace-nowrap">({{ $tag->jobs_count . " " . Str::of('Job')->plural($tag->jobs_count) }})</span>
         @endisset
     </div>
 </a>

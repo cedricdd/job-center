@@ -5,7 +5,7 @@
 @section("content")
     <x-header-title>{{ ucwords($tag->name) }} ({{ $tag->jobs_count }} Jobs)</x-header-title>
 
-    <x-nav-jobs-sorting />
+    <x-nav-sorting type="jobs" />
 
     <div class="mt-4 space-y-4">
         @foreach($jobs as $job)

@@ -18,19 +18,24 @@ class EmployerController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('auth', except: ['index', 'show']),
+            new Middleware('auth', except: ['index', 'show', 'sorting']),
             new Middleware('can:update,employer', only: ['edit', 'update']),
             new Middleware('can:destroy,employer', only: ['destroy']),
             new Middleware('jobSorting', only: ['show']),
+            new Middleware('employerSorting', only: ['index']),
         ];
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(string $employerSorting): View
     {
-        $employers = Employer::with("user")->withCount("jobs")->orderBy("name", "ASC")->having("jobs_count", ">", 0)->paginate(20);
+        $employers = Employer::with("user")
+            ->withCount("jobs")
+            ->orderByRaw(Constants::EMPLOYER_SORTING[$employerSorting]['order'])
+            ->having("jobs_count", ">", 0)
+            ->paginate(20);
 
         return view("employers.index", compact('employers'));
     }
@@ -69,7 +74,7 @@ class EmployerController extends Controller implements HasMiddleware
 
         $jobs = $employer->jobs()->with(['tags'])->orderByRaw(Constants::JOB_SORTING[$jobSorting]['order'])->paginate(10, total: $employer->jobs_count);
 
-        $jobs->transform(fn (Job $job): Job => $job->setRelation('employer', $employer));
+        $jobs->transform(fn(Job $job): Job => $job->setRelation('employer', $employer));
 
         return view("employers.show", compact("employer", "jobs"));
     }
@@ -116,5 +121,18 @@ class EmployerController extends Controller implements HasMiddleware
         $employer->delete();
 
         return redirect()->route("users.profile", $request->user()->id)->with("success", "The employer {$employer->name} was successfully deleted!");
+    }
+
+    public function sorting(Request $request): RedirectResponse
+    {
+        $sorting = $request->input("sort", Constants::EMPLOYER_SORTING_DEFAULT);
+
+        if (isset(Constants::EMPLOYER_SORTING[$sorting])) {
+            $request->session()->put("employer-sorting", $sorting);
+        } else {
+            $request->session()->forget("employer-sorting");
+        }
+
+        return redirect()->back();
     }
 }

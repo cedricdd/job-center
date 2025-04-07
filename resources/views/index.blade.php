@@ -25,7 +25,7 @@
 
         <div class="flex flex-wrap gap-2 mt-4 text-center">
             @foreach ($tags as $tag)
-                <x-tag-display :$tag class="flex-1" title="Currently {{ $tag->jobs_count }} Jobs" />
+                <x-tag-display :$tag class="flex-1" title="Currently {{ $tag->jobs_count }} jobs associated with {{ $tag->name }}" />
             @endforeach
         </div>
     </section>
