@@ -1,7 +1,7 @@
 @props(["tag", "size" => "base"])
 
 @php
-    $classes = "bg-white/15 rounded hover:bg-white/25 cursor-pointer transition-colors duration-300 hover:text-gray-300 flex items-center gap-x-1";
+    $classes = "bg-white/15 rounded hover:bg-white/25 cursor-pointer transition-colors duration-300 hover:text-gray-300 flex items-center gap-x-1 flex-1";
 
     $classes .= $size == "base" ? " px-4 py-1" : " px-2 py-1 text-sm";
 
@@ -10,5 +10,10 @@
 
 <a href="{{ route("tags.show", $tag->name) }}" {{ $attributes->merge(['class' => $classes]) }}>
     <div class="{{ $mark }}"></div>
-    <div>{{ $tag->name }}</div>
+    <div class="flex justify-between items-center w-full">
+        <span>{{ $tag->name }}</span>
+        @isset($tag->jobs_count)
+        <span class="ml-4">({{ $tag->jobs_count . " " . Str::of('Job')->plural($tag->jobs_count) }})</span>
+        @endisset
+    </div>
 </a>

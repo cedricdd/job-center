@@ -9,9 +9,9 @@ use Illuminate\Contracts\View\View;
 
 class TagController extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        $tags = Tag::withCount("jobs")->orderBy("name", "ASC")->get();
+        $tags = Tag::withCount("jobs")->having("jobs_count", ">", 0)->orderBy("name", "ASC")->get();
 
         return view("tags.index", compact('tags'));
     }
