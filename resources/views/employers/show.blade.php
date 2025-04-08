@@ -14,7 +14,7 @@
             {{ $employer->description }}
         </div>
         <div class="flex gap-2 items-center justify-between flex-wrap">
-            <p class="bg-white/10 px-4 py-2.5 rounded font-bold">Currently: {{ $employer->jobs_count }} Jobs</p>
+            <p class="bg-white/10 px-4 py-2.5 rounded font-bold">Currently: {{ $employer->jobs_count }} Jobs @if($employer->jobs_featured_count) -- {{ $employer->jobs_featured_count }} Featured @endif</p>
             <div class="flex-1 flex gap-2 justify-end">
                 <x-link-button-white href="{{ $employer->url }}" target='_blank'>Website</x-link-button-white>
                 @if ($employer->user->is(Auth::user()))

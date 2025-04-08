@@ -70,9 +70,9 @@ class EmployerController extends Controller implements HasMiddleware
      */
     public function show(Employer $employer, string $jobSorting): View
     {
-        $employer->loadCount("jobs")->with("user");
+        $employer->loadCount(["jobs", "jobs as jobs_featured_count" => fn($query) => $query->where('featured', true)])->load("user");
 
-        $jobs = $employer->jobs()->with(['tags'])->orderByRaw(Constants::JOB_SORTING[$jobSorting]['order'])->paginate(10, total: $employer->jobs_count);
+        $jobs = $employer->jobs()->with('tags')->orderByRaw(Constants::JOB_SORTING[$jobSorting]['order'])->paginate(10, total: $employer->jobs_count);
 
         $jobs->transform(fn(Job $job): Job => $job->setRelation('employer', $employer));
 

@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Job extends Model
@@ -20,6 +21,14 @@ class Job extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class)->withTimestamps();
+    }
+
+    public function scopeFeatured(Builder $query): Builder {
+        return $query->where("featured", true);
+    }
+
+    public function scopeNonFeatured(Builder $query): Builder {
+        return $query->where("featured", false);
     }
 
     public function url(): string

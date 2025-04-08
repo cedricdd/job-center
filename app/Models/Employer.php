@@ -19,6 +19,11 @@ class Employer extends Model
         return $this->hasMany(Job::class);
     }
 
+    public function jobsFeatured(): HasMany
+    {
+        return $this->jobs()->withAttributes(['featured' => true]);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

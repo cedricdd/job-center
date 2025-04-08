@@ -28,22 +28,17 @@ class SiteController extends Controller
         return view("index", compact("jobs", "jobsFeatured", "tags"));
     }
 
-    public function search(): View
+    public function search(Request $request, string $jobSorting): View
     {
-        $term = request("q");
+        $term = $request->input("q", "");
+        
         $jobs = Job::with([
             "employer" => fn($query) => $query->with("user"), 
             "tags" => fn($query) => $query->orderBy('name', 'ASC')
-        ]);
+        ])->whereFullText(['title', 'location', 'schedule'], $term)
+        ->orderByRaw(Constants::JOB_SORTING[$jobSorting]['order'])
+        ->paginate(15);
 
-        if (in_array(strtolower($term), array_map('strtolower', Constants::SCHEDULES))) {
-            $jobs = $jobs->where("schedule", "=", $term);
-        } else {
-            $jobs = $jobs->where("title", "LIKE", "%{$term}%")
-                ->orWhereHas("tags", fn($query) => $query->where("name", "LIKE", "%{$term}%"));
-        }
-
-        $jobs = $jobs->latest()->paginate(15);
         $jobs->appends(["q" => $term]);
 
         $title = "Jobs Listed for " . $term;

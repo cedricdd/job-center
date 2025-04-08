@@ -25,7 +25,7 @@ Route::delete("logout", [SessionController::class, "destroy"])->name("sessions.d
 
 Route::get("profile", [UserController::class, "profile"])->name("users.profile")->middleware("auth");
 
-Route::get("search", [SiteController::class, "search"])->name("search");
+Route::get("search", [SiteController::class, "search"])->name("search")->middleware('jobSorting');
 
 Route::post("sorting/{type}", [SiteController::class, "sorting"])->name("sorting")->where('type', '[a-z]+');
 
