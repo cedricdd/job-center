@@ -19,7 +19,7 @@
             value="{{ old('location', $job?->location) }}" required />
     </div>
     <div class="mb-5">
-        <x-forms.select select-name="schedule" label="Select Schedule" :items="array_combine(Constants::SCHEDULES, Constants::SCHEDULES)" :current="$job?->schedule" />
+        <x-forms.select select-name="schedule" label="Schedule" :items="array_combine(Constants::SCHEDULES, Constants::SCHEDULES)" :current="$job?->schedule" />
     </div>
     <div class="mb-5">
         <x-forms.input input-name="url" label="URL" placeholder="Enter link to the job"
@@ -30,7 +30,7 @@
             value="{{ old('tags', $job?->tags()->implode('name', ', ')) }}" />
     </div>
     <div class="mb-5">
-        <x-forms.select select-name="employer_id" label="Select Employer" :items="Auth::user()->employers->pluck('name', 'id')" :current="$job?->employer->id ?? $employerID" />
+        <x-forms.select select-name="employer_id" label="Employer" :items="Auth::user()->employers->pluck('name', 'id')" :current="$job?->employer->id ?? $employerID" />
     </div>
     <div class="mb-5">
         <x-forms.checkbox input-name="featured" label="Featured Job (You should pay for that but it's just a test project)" :checked="old('featured', $job?->featured)" />

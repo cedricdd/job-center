@@ -31,16 +31,18 @@ class JobController extends Controller implements HasMiddleware
      */
     public function index(string $jobSorting): View
     {
+        $featured = request()->route()->getName() == "jobs.featured";
+
         $jobs = Job::with([
             "employer" => fn($query) => $query->with("user"), 
             "tags" => fn($query) => $query->orderBy('name', 'ASC')
         ])->orderByRaw(Constants::JOB_SORTING[$jobSorting]['order'])
-        ->when(request()->route()->getName() == "jobs.featured", function($query) {
-            $query->where("featured", true);
-        })
+        ->when($featured, fn($query) => $query->featured())
         ->paginate(15);
 
-        return view("jobs.index", compact("jobs"));
+        $title = $featured ? "Featured Jobs" : "Jobs List";
+
+        return view("jobs.index", compact("jobs", "title"));
     }
 
     /**

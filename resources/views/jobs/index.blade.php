@@ -8,7 +8,7 @@
     </form>
 
     @if ($jobs->count() == 0)
-        <x-header-title>We currently don't have any jobs matching your search!</x-header-title>
+        <x-header-title>No jobs matching your search have been found!</x-header-title>
     @else
         <x-header-title>{{ $title ?? 'Jobs List' }}</x-header-title>
 

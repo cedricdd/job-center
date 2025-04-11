@@ -3,7 +3,7 @@
 @section('title', 'Companies')
 
 @section('content')
-    <x-header-title>Every Companies</x-header-title>
+    <x-header-title>Company List</x-header-title>
 
     <x-nav-sorting type="employers" />
 

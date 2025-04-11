@@ -14,18 +14,23 @@
             {{ $employer->description }}
         </div>
         <div class="flex gap-2 items-center justify-between flex-wrap">
-            <p class="bg-white/10 px-4 py-2.5 rounded font-bold">Currently: {{ $employer->jobs_count }} Jobs @if($employer->jobs_featured_count) -- {{ $employer->jobs_featured_count }} Featured @endif</p>
+            <p class="bg-white/10 px-4 py-2.5 rounded font-bold">Currently: {{ $employer->jobs_count }} Jobs @if ($employer->jobs_featured_count)
+                    -- {{ $employer->jobs_featured_count }} Featured
+                @endif
+            </p>
             <div class="flex-1 flex gap-2 justify-end">
                 <x-link-button-white href="{{ $employer->url }}" target='_blank'>Website</x-link-button-white>
-                @if ($employer->user->is(Auth::user()))
+                @can('update', $employer)
                     <x-link-button-blue href="{{ route('employers.edit', $employer->id) }}">Edit</x-link-button-blue>
-
+                    <x-link-button-green href="{{ route('jobs.create', $employer->id) }}">Add Job</x-link-button-green>
+                @endcan
+                @can('destroy', $employer)
                     <form action="{{ route('employers.destroy', $employer->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <x-forms.button-red>Delete</x-forms.button-red>
                     </form>
-                @endif
+                @endcan
             </div>
         </div>
     </div>
@@ -33,11 +38,11 @@
     <div class="mt-20">
         <h2 class="text-3xl font-bold text-center mb-4">Jobs List</h2>
 
-        <x-nav-sorting type="jobs" />
-
-        @if ($employer->jobs_count == 0)
-            <p class="text-center text-gray-500">No jobs available</p>
+        @if ($jobs->count() == 0)
+            <p class="text-center text-gray-500 text-4xl mt-10">No jobs available</p>
         @else
+            <x-nav-sorting type="jobs" />
+
             <div class="mt-4 space-y-4">
                 @foreach ($jobs as $job)
                     <x-jobs.display-big :$job :hideLogo="true" />
@@ -46,6 +51,6 @@
 
             <div class="mt-4">
                 {{ $jobs->links() }}
+            </div>
         @endif
-    </div>
-@endsection
+    @endsection

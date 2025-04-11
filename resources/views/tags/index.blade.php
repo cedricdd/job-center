@@ -1,9 +1,9 @@
 @extends('layouts.main')
 
-@section('title', 'Tag Center')
+@section('title', 'Tags Center')
 
 @section('content')
-    <x-header-title>Tag Center</x-header-title>
+    <x-header-title>Tags Center</x-header-title>
 
     <div class="flex gap-4 flex-wrap justify-center">
         @foreach($tags as $tag)
