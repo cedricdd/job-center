@@ -20,9 +20,11 @@
     <div class="flex flex-col justify-between items-end">
         <div class="flex gap-2">
             <x-span-info>
-                <a href="{{ route('search') . '/?q=' . urlencode($job->schedule) }}">{{ ucwords($job->schedule) }}</a>
+                <a href="{{ route('search', ['q' => urlencode($job->schedule)]) }}">{{ $job->schedule }}</a>
             </x-span-info>
-            <x-span-info>{{ $job->location }}</x-span-info>
+            <x-span-info>
+                <a href="{{ route('search', ['q' => urlencode($job->location)]) }}">{{ $job->location }}</a>
+            </x-span-info>
             <x-span-info>{{ $job->updated_at->diffForHumans() }}</x-span-info>
         </div>
         <div class="flex gap-2">

@@ -16,9 +16,11 @@
         <div>
             <x-span-info>{{ $job->salary }}</x-span-info>
             <x-span-info>
-                <a href="{{ route('search') . "?=" . urlencode($job->schedule) }}">{{ $job->schedule }}</a>
+                <a href="{{ route('search', ["q" => urlencode($job->schedule)]) }}">{{ $job->schedule }}</a>
             </x-span-info>
-            <x-span-info>{{ $job->location }}</x-span-info>
+            <x-span-info>
+                <a href="{{ route('search', ["q" => urlencode($job->location)]) }}">{{ $job->location }}</a>
+            </x-span-info>
         </div>
         <x-link-button-white href="{{ $job->url }}">More Infos</x-link-button-white>
     </div>
