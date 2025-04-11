@@ -1,7 +1,9 @@
 @props(["tag", "size" => "base"])
 
 @php
-    $classes = "bg-white/15 rounded hover:bg-white/25 cursor-pointer transition-colors duration-300 hover:text-gray-300 flex items-center gap-x-1 flex-1";
+    $classes = "bg-white/15 rounded hover:bg-white/25 cursor-pointer transition-colors duration-300 hover:text-gray-300 flex items-center gap-x-1";
+
+    if($size == "base") $classes .= " flex-1 min-w-[200px]";
 
     $classes .= $size == "base" ? " px-4 py-1" : " px-2 py-1 text-sm";
 

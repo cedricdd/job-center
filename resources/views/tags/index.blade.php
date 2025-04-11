@@ -7,7 +7,7 @@
 
     <div class="flex gap-4 flex-wrap justify-center">
         @foreach($tags as $tag)
-            <x-tag-display :$tag class="min-w-[200px]" />
+            <x-tag-display :$tag />
         @endforeach
     </div>
 @endsection
