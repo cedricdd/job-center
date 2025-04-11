@@ -1,6 +1,13 @@
 <?php
 
+use App\Models\Job;
 use App\Models\User;
+
+use App\Models\Employer;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 test('index_loads', function () {
     $response = $this->get(route('index'));
@@ -37,6 +44,18 @@ test('search_loads', function () {
 
     $response->assertStatus(200);
     $response->assertSeeText("No jobs matching your search have been found");
+});
+
+test('search_loads_with_query', function () {
+    $job = Job::factory()->for(Employer::factory()->for(User::factory()))->create();
+
+    DB::commit(); //Fulltext search requires a commit to be effective, it doesn't work inside a transaction
+
+    $response = $this->get(route('search', ['q' => urlencode($job->title)]));
+
+    $response->assertStatus(200);
+    $response->assertDontSeeText("No jobs matching your search have been found");
+    $response->assertViewHas('jobs', fn ($jobs) => $jobs->contains($job));
 });
 
 test('check_redirect_fallback', function () {

@@ -1,8 +1,12 @@
 <?php
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
 use App\Models\Job; 
 use App\Models\User;
 use App\Models\Employer;
+
+uses(RefreshDatabase::class);
 
 test('job_index_loads', function () {
     $response = $this->get(route('jobs.index'));
@@ -25,6 +29,7 @@ test('job_show_loads', function () {
 
     $response->assertStatus(200);
     $response->assertSeeText($job->title);
+    $response->assertViewHas('job', fn ($viewJob) => $viewJob->is($job));
 });
 
 test('job_create_loads', function () {
@@ -44,6 +49,7 @@ test('job_edit_loads', function () {
 
     $response->assertStatus(200);
     $response->assertSeeTextInOrder([$job->title, $job->schedule, $job->employer->name]);
+    $response->assertViewHas('job', fn ($viewJob) => $viewJob->is($job));
 });
 
 test('job_edit_check_right_user', function () {

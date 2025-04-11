@@ -90,7 +90,7 @@ class JobController extends Controller implements HasMiddleware
     {
         $job->load(["employer", "tags" => fn($query) => $query->orderBy('name', 'ASC')]);
 
-        return view("jobs.show", ["job" => $job]);
+        return view("jobs.show", compact('job'));
     }
 
     /**
