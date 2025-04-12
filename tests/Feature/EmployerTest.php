@@ -71,6 +71,12 @@ test('employer_create', function () {
     $response->assertSeeText('Create a Company');
 });
 
+test('employer_create_cant_be_accessed_by_guest_user', function () {
+    $response = $this->get(route('employers.create'));
+
+    $response->assertRedirect(route('sessions.create'));
+});
+
 test('employer_edit', function () {
     $user = User::factory()->create();
     $employer = Employer::factory()->for($user, 'user')->create();
@@ -80,6 +86,14 @@ test('employer_edit', function () {
     $response->assertStatus(200);
     $response->assertSeeText($employer->name);
     $response->assertViewHas('employer', fn($viewEmployer) => $viewEmployer->is($employer));
+});
+
+test('employer_edit_cant_be_accessed_by_guest_user', function () {
+    $employer = Employer::factory()->create();
+
+    $response = $this->get(route('employers.edit', $employer->id));
+
+    $response->assertRedirect(route('sessions.create'));
 });
 
 test('employer_edit_check_right_user', function () {

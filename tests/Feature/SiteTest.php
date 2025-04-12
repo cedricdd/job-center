@@ -23,11 +23,27 @@ test('login', function () {
     $response->assertSeeTextInOrder(['Email', 'Password']);
 });
 
+test('login_cant_be_accessed_by_authenticated_user', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->get(route('sessions.create'));
+
+    $response->assertRedirect(route('index'));
+});
+
 test('register', function () {
     $response = $this->get(route('users.create'));
 
     $response->assertStatus(200);
     $response->assertSeeTextInOrder(['Name', 'Email', 'Password']);
+});
+
+test('register_cant_be_accessed_by_authenticated_user', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->get(route('users.create'));
+
+    $response->assertRedirect(route('index'));
 });
 
 test('profile', function () {
@@ -37,6 +53,12 @@ test('profile', function () {
 
     $response->assertStatus(200);
     $response->assertSeeTextInOrder(['Your Profile', 'Your Profile']);
+});
+
+test('profile_cant_be_accessed_by_guest_user', function () {
+    $response = $this->get(route('users.profile'));
+
+    $response->assertRedirect(route('sessions.create'));
 });
 
 test('search', function () {

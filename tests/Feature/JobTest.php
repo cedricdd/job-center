@@ -66,6 +66,12 @@ test('job_create', function () {
     $response->assertSeeTextInOrder(['Job Title', 'Schedule', 'Employer']);
 });
 
+test('job_create_cant_be_accessed_by_guest_user', function () {
+    $response = $this->get(route('jobs.create'));
+
+    $response->assertRedirect(route('sessions.create'));
+});
+
 test('job_edit', function () {
     $user = User::factory()->create();
     $job = Job::factory()->for(Employer::factory()->for($user, 'user'), 'employer')->create();
@@ -75,6 +81,14 @@ test('job_edit', function () {
     $response->assertStatus(200);
     $response->assertSeeTextInOrder([$job->title, $job->schedule, $job->employer->name]);
     $response->assertViewHas('job', fn ($viewJob) => $viewJob->is($job));
+});
+
+test('job_edit_cant_be_accessed_by_guest_user', function () {
+    $job = Job::factory()->create();
+
+    $response = $this->get(route('jobs.edit', $job->id));
+
+    $response->assertRedirect(route('sessions.create'));
 });
 
 test('job_edit_check_right_user', function () {
