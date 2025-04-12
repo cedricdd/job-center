@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use PHPUnit\TextUI\Configuration\Constant;
 
 class JobController extends Controller implements HasMiddleware
 {
