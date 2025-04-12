@@ -35,7 +35,7 @@ class EmployerController extends Controller implements HasMiddleware
             ->withCount("jobs")
             ->orderByRaw(Constants::EMPLOYER_SORTING[$employerSorting]['order'])
             ->having("jobs_count", ">", 0)
-            ->paginate(20);
+            ->paginate(Constants::EMPLOYERS_PER_PAGE);
 
         return view("employers.index", compact('employers'));
     }
@@ -72,7 +72,7 @@ class EmployerController extends Controller implements HasMiddleware
     {
         $employer->loadCount(["jobs", "jobs as jobs_featured_count" => fn($query) => $query->where('featured', true)])->load("user");
 
-        $jobs = $employer->jobs()->with('tags')->orderByRaw(Constants::JOB_SORTING[$jobSorting]['order'])->paginate(10, total: $employer->jobs_count);
+        $jobs = $employer->jobs()->with('tags')->orderByRaw(Constants::JOB_SORTING[$jobSorting]['order'])->paginate(Constants::JOBS_PER_PAGE, total: $employer->jobs_count);
 
         $jobs->transform(fn(Job $job): Job => $job->setRelation('employer', $employer));
 

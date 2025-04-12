@@ -20,7 +20,7 @@ class TagController extends Controller
     {
         $tag->loadCount("jobs");
 
-        $jobs = $tag->jobs()->with(['tags', 'employer'])->orderByRaw(Constants::JOB_SORTING[$jobSorting]["order"])->paginate(10);
+        $jobs = $tag->jobs()->with(['tags', 'employer'])->orderByRaw(Constants::JOB_SORTING[$jobSorting]["order"])->paginate(Constants::JOBS_PER_PAGE);
 
         return view("tags.show", compact("tag", 'jobs'));
     }

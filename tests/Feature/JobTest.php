@@ -1,29 +1,54 @@
 <?php
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Constants;
 
 use App\Models\Job; 
 use App\Models\User;
 use App\Models\Employer;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('job_index_loads', function () {
+test('job_index', function () {
+    $jobs = Job::factory()->count(Constants::JOBS_PER_PAGE + 1)->create();
+
     $response = $this->get(route('jobs.index'));
 
     $response->assertStatus(200);
     $response->assertSeeText('Jobs List');
+
+    $sortedJobs = $jobs->sortBy($this->getJobSorting());
+
+    $response->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->first()));
+    $response->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->last()));
+
+    $response = $this->get(route('jobs.index', ['page' => 2]));
+
+    $response->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->first()));
+    $response->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->last()));
 });
 
-test('job_featured_loads', function () {
+test('job_featured', function () {
+    $jobs = Job::factory()->count(Constants::JOBS_PER_PAGE + 1)->create(['featured' => true]);
+
     $response = $this->get(route('jobs.featured'));
 
     $response->assertStatus(200);
     $response->assertSeeText('Featured Jobs');
+
+    $sortedJobs = $jobs->sortBy($this->getJobSorting());
+
+    $response->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->first()));
+    $response->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->last()));
+
+    $response = $this->get(route('jobs.index', ['page' => 2]));
+
+    $response->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->first()));
+    $response->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->last()));
 });
 
-test('job_show_loads', function () {
-    $job = Job::factory()->for(Employer::factory()->for(User::factory(), 'user'), 'employer')->create();
+test('job_show', function () {
+    $job = Job::factory()->create();
 
     $response = $this->get(route('jobs.show', $job->id));
 
@@ -32,7 +57,7 @@ test('job_show_loads', function () {
     $response->assertViewHas('job', fn ($viewJob) => $viewJob->is($job));
 });
 
-test('job_create_loads', function () {
+test('job_create', function () {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)->get(route('jobs.create'));
@@ -41,7 +66,7 @@ test('job_create_loads', function () {
     $response->assertSeeTextInOrder(['Job Title', 'Schedule', 'Employer']);
 });
 
-test('job_edit_loads', function () {
+test('job_edit', function () {
     $user = User::factory()->create();
     $job = Job::factory()->for(Employer::factory()->for($user, 'user'), 'employer')->create();
 

@@ -37,7 +37,7 @@ class SiteController extends Controller
             "tags" => fn($query) => $query->orderBy('name', 'ASC')
         ])->whereFullText(['title', 'location', 'schedule'], $term)
         ->orderByRaw(Constants::JOB_SORTING[$jobSorting]['order'])
-        ->paginate(15);
+        ->paginate(Constants::JOBS_PER_PAGE);
 
         $jobs->appends(["q" => $term]);
 

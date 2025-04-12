@@ -18,6 +18,8 @@ class JobFactory extends Factory
      */
     public function definition(): array
     {
+        $date = fake()->dateTimeThisMonth();
+
         return [
             "title" => fake()->jobTitle(),
             "salary" => "$" . number_format(fake()->numberBetween(10000, 1000000)) . " USD",
@@ -25,6 +27,9 @@ class JobFactory extends Factory
             "schedule" => Arr::random(Constants::SCHEDULES),
             "url" => fake()->url(),
             "featured" => random_int(1, 20) == 10 ? true : false,
+            "employer_id" => \App\Models\Employer::factory(),
+            "created_at" => $date,
+            "updated_at" => $date,
         ];
     }
 }

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use PHPUnit\TextUI\Configuration\Constant;
 
 class JobController extends Controller implements HasMiddleware
 {
@@ -38,7 +39,7 @@ class JobController extends Controller implements HasMiddleware
             "tags" => fn($query) => $query->orderBy('name', 'ASC')
         ])->orderByRaw(Constants::JOB_SORTING[$jobSorting]['order'])
         ->when($featured, fn($query) => $query->featured())
-        ->paginate(15);
+        ->paginate(Constants::JOBS_PER_PAGE);
 
         $title = $featured ? "Featured Jobs" : "Jobs List";
 
