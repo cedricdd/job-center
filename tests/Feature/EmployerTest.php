@@ -15,7 +15,7 @@ test('employer_index', function () {
     });
 
     //Find the last employer in the list with the default sorting
-    $employer = $employers->sortBy($this->getEmployerSorting());
+    $employer = $employers->sortBy($this->sortingEmployers);
 
     $response = $this->get(route('employers.index'));
 
@@ -51,7 +51,7 @@ test('employer_show', function () {
     $response->assertSeeText($employer->name);
     $response->assertViewHas('employer', fn($viewEmployer) => $viewEmployer->is($employer));
 
-    $sortedJobs = $employer->jobs->sortBy($this->getJobSorting());
+    $sortedJobs = $employer->jobs->sortBy($this->sortingJobs);
 
     $response->assertViewHas('jobs', fn($jobs) => $jobs->contains($sortedJobs->first()));
     $response->assertViewHas('jobs', fn($jobs) => !$jobs->contains($sortedJobs->last()));
@@ -63,9 +63,7 @@ test('employer_show', function () {
 });
 
 test('employer_create', function () {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)->get(route('employers.create'));
+    $response = $this->actingAs($this->user)->get(route('employers.create'));
 
     $response->assertStatus(200);
     $response->assertSeeText('Create a Company');
@@ -78,10 +76,9 @@ test('employer_create_cant_be_accessed_by_guest_user', function () {
 });
 
 test('employer_edit', function () {
-    $user = User::factory()->create();
-    $employer = Employer::factory()->for($user, 'user')->create();
+    $employer = Employer::factory()->for($this->user, 'user')->create();
 
-    $response = $this->actingAs($user)->get(route('employers.edit', $employer->id));
+    $response = $this->actingAs($this->user)->get(route('employers.edit', $employer->id));
 
     $response->assertStatus(200);
     $response->assertSeeText($employer->name);

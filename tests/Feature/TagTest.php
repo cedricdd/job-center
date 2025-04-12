@@ -33,7 +33,7 @@ test('tags_show', function () {
     $response->assertSeeText($tag->name);
     $response->assertViewHas('tag', fn ($viewTag) => $viewTag->is($tag));
 
-    $sortedJobs = $tag->jobs->sortBy($this->getJobSorting());
+    $sortedJobs = $tag->jobs->sortBy($this->sortingJobs);
 
     $response->assertViewHas('jobs', fn ($jobs) => $jobs->contains($sortedJobs->first()));
     $response->assertViewHas('jobs', fn ($jobs) => !$jobs->contains($sortedJobs->last()));

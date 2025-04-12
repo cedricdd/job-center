@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
+
 test('index', function () {
     $response = $this->get(route('index'));
 
@@ -24,9 +25,7 @@ test('login', function () {
 });
 
 test('login_cant_be_accessed_by_authenticated_user', function () {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)->get(route('sessions.create'));
+    $response = $this->actingAs($this->user)->get(route('sessions.create'));
 
     $response->assertRedirect(route('index'));
 });
@@ -39,17 +38,13 @@ test('register', function () {
 });
 
 test('register_cant_be_accessed_by_authenticated_user', function () {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)->get(route('users.create'));
+    $response = $this->actingAs($this->user)->get(route('users.create'));
 
     $response->assertRedirect(route('index'));
 });
 
 test('profile', function () {
-    $user = User::factory()->create();
-    
-    $response = $this->actingAs($user)->get(route('users.profile'));
+    $response = $this->actingAs($this->user)->get(route('users.profile'));
 
     $response->assertStatus(200);
     $response->assertSeeTextInOrder(['Your Profile', 'Your Profile']);
@@ -78,7 +73,7 @@ test('search_with_query', function () {
     $response->assertStatus(200);
     $response->assertDontSeeText("No jobs matching your search have been found");
 
-    $sortedJobs = $jobs->sortBy($this->getJobSorting());
+    $sortedJobs = $jobs->sortBy($this->sortingJobs);
 
     $response->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->first()));
     $response->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->last()));

@@ -17,7 +17,7 @@ test('job_index', function () {
     $response->assertStatus(200);
     $response->assertSeeText('Jobs List');
 
-    $sortedJobs = $jobs->sortBy($this->getJobSorting());
+    $sortedJobs = $jobs->sortBy($this->sortingJobs);
 
     $response->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->first()));
     $response->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->last()));
@@ -36,7 +36,7 @@ test('job_featured', function () {
     $response->assertStatus(200);
     $response->assertSeeText('Featured Jobs');
 
-    $sortedJobs = $jobs->sortBy($this->getJobSorting());
+    $sortedJobs = $jobs->sortBy($this->sortingJobs);
 
     $response->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->first()));
     $response->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->last()));
@@ -58,9 +58,7 @@ test('job_show', function () {
 });
 
 test('job_create', function () {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)->get(route('jobs.create'));
+    $response = $this->actingAs($this->user)->get(route('jobs.create'));
 
     $response->assertStatus(200);
     $response->assertSeeTextInOrder(['Job Title', 'Schedule', 'Employer']);
@@ -73,10 +71,9 @@ test('job_create_cant_be_accessed_by_guest_user', function () {
 });
 
 test('job_edit', function () {
-    $user = User::factory()->create();
-    $job = Job::factory()->for(Employer::factory()->for($user, 'user'), 'employer')->create();
+    $job = Job::factory()->for(Employer::factory()->for($this->user, 'user'), 'employer')->create();
 
-    $response = $this->actingAs($user)->get(route('jobs.edit', $job->id));
+    $response = $this->actingAs($this->user)->get(route('jobs.edit', $job->id));
 
     $response->assertStatus(200);
     $response->assertSeeTextInOrder([$job->title, $job->schedule, $job->employer->name]);
@@ -92,10 +89,9 @@ test('job_edit_cant_be_accessed_by_guest_user', function () {
 });
 
 test('job_edit_check_right_user', function () {
-    $user = User::factory()->create();
     $job = Job::factory()->for(Employer::factory()->for(User::factory(), 'user'), 'employer')->create();
 
-    $response = $this->actingAs($user)->get(route('jobs.edit', $job->id));
+    $response = $this->actingAs($this->user)->get(route('jobs.edit', $job->id));
 
     $response->assertStatus(403);
 });
