@@ -64,7 +64,7 @@ test('search', function () {
 });
 
 test('search_with_query', function () {
-    $jobs = Job::factory()->count(Constants::JOBS_PER_PAGE + 1)->create(['title' => 'Test Job' . rand(1, 100)]);
+    $jobs = $this->createJobs(count: Constants::JOBS_PER_PAGE + 1, params: ['title' => 'Test Job' . rand(1, 100)]);
 
     DB::commit(); //Fulltext search requires a commit to be effective, it doesn't work inside a transaction
 

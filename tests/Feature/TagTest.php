@@ -24,8 +24,7 @@ test('tags_index', function () {
 });
 
 test('tags_show', function () {
-    $tag = Tag::factory()->create();
-    $tag->jobs()->attach(Job::factory()->count(Constants::JOBS_PER_PAGE + 1)->create());
+    $tag = Tag::factory()->has(Job::factory()->count(Constants::JOBS_PER_PAGE + 1), 'jobs')->create();
 
     $response = $this->get(route('tags.show', $tag->name));
 

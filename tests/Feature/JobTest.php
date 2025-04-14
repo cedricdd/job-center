@@ -10,8 +10,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 test('job_index', function () {
-    $jobs = Job::factory()->count(Constants::JOBS_PER_PAGE + 1)->create();
-
+    $jobs = $this->createJobs(count: Constants::JOBS_PER_PAGE + 1);
+ 
     $response = $this->get(route('jobs.index'));
 
     $response->assertStatus(200);
@@ -28,8 +28,22 @@ test('job_index', function () {
     $response->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->last()));
 });
 
+test('job_index_see_job_options', function () {
+    $this->createJobs(count: 10, user: $this->user);
+
+    //Random user should not see edit and delete options
+    $response = $this->actingAs(User::factory()->create())->get(route('jobs.index'));
+
+    $response->assertDontSeeText(['Edit', 'Delete']);
+
+    //User should see edit and delete options
+    $response = $this->actingAs($this->user)->get(route('jobs.index'));
+
+    $response->assertSeeText(['Edit', 'Delete']);
+});
+
 test('job_featured', function () {
-    $jobs = Job::factory()->count(Constants::JOBS_PER_PAGE + 1)->create(['featured' => true]);
+    $jobs = $this->createJobs(count: Constants::JOBS_PER_PAGE + 1, params: ['featured' => true]);
 
     $response = $this->get(route('jobs.featured'));
 
@@ -48,7 +62,7 @@ test('job_featured', function () {
 });
 
 test('job_show', function () {
-    $job = Job::factory()->create();
+    $job = $this->createJobs(count: 1);
 
     $response = $this->get(route('jobs.show', $job->id));
 
@@ -71,7 +85,7 @@ test('job_create_cant_be_accessed_by_guest_user', function () {
 });
 
 test('job_edit', function () {
-    $job = Job::factory()->for(Employer::factory()->for($this->user, 'user'), 'employer')->create();
+    $job = $this->createJobs(count: 1, user: $this->user);
 
     $response = $this->actingAs($this->user)->get(route('jobs.edit', $job->id));
 
@@ -81,7 +95,7 @@ test('job_edit', function () {
 });
 
 test('job_edit_cant_be_accessed_by_guest_user', function () {
-    $job = Job::factory()->create();
+    $job = $this->createJobs(count: 1);
 
     $response = $this->get(route('jobs.edit', $job->id));
 
@@ -89,7 +103,7 @@ test('job_edit_cant_be_accessed_by_guest_user', function () {
 });
 
 test('job_edit_check_right_user', function () {
-    $job = Job::factory()->for(Employer::factory()->for(User::factory(), 'user'), 'employer')->create();
+    $job = $this->createJobs(count: 1);
 
     $response = $this->actingAs($this->user)->get(route('jobs.edit', $job->id));
 

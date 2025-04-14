@@ -18,7 +18,7 @@ class JobFactory extends Factory
      */
     public function definition(): array
     {
-        $date = fake()->dateTimeBetween("-1 month", "now")->setTimezone(new \DateTimeZone('UTC'));
+        $date = fake()->dateTimeThisMonth(timezone: 'CET');
 
         return [
             "title" => fake()->jobTitle(),
