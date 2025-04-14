@@ -53,14 +53,16 @@ class EmployerController extends Controller implements HasMiddleware
      */
     public function store(EmployerRequest $request): RedirectResponse
     {
-        $path = $request->file('logo')->store('logos');
-
         $employer = new Employer();
         $employer->name = $request->input('name');
         $employer->url = $request->input('url');
         $employer->description = $request->input('description');
-        $employer->logo = $path;
         $employer->user()->associate($request->user())->save();
+
+        $logo = $request->file('logo');
+
+        $employer->logo = $logo->storeAs('logos', $employer->id . "." . $logo->extension(), ['disk' => 'public']);
+        $employer->save();
 
         return redirect()->route("users.profile", $request->user()->id)->with("success", "The company {$employer->name} has been successfully created!");
     }
@@ -98,7 +100,8 @@ class EmployerController extends Controller implements HasMiddleware
 
         if ($request->has('logo')) {
             //Remove the old logo from storage
-            Storage::delete($employer->logo);
+            if ($employer->logo !== null && Storage::exists($employer->logo))
+                Storage::delete($employer->logo);
 
             //Store the new logo
             $employer->logo = $request->file('logo')->storeAs("logos", $employer->id . "." . $request->file('logo')->extension());
@@ -115,7 +118,8 @@ class EmployerController extends Controller implements HasMiddleware
     public function destroy(Request $request, Employer $employer): RedirectResponse
     {
         //Remove the logo from storage
-        Storage::delete($employer->logo);
+        if ($employer->logo !== null && Storage::exists($employer->logo))
+            Storage::delete($employer->logo);
 
         //Remove the employer from the database
         $employer->delete();

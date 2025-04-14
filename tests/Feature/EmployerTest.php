@@ -1,9 +1,9 @@
 <?php
 
 use App\Constants;
-use App\Models\Job;
-use App\Models\User;
 use App\Models\Employer;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -70,6 +70,66 @@ test('employer_create_cant_be_accessed_by_guest_user', function () {
     $response = $this->get(route('employers.create'));
 
     $response->assertRedirect(route('sessions.create'));
+});
+
+test('employer_create_successful', function () {
+    Storage::fake('public'); // Create a fake storage disk for testing
+
+    $size = (Constants::MIN_RES_EMPLOYER_LOGO + Constants::MAX_RES_EMPLOYER_LOGO) / 2;
+
+    $response = $this->actingAs($this->user)->post(route('employers.store'), $this->getEmployerFormData(['logo' => UploadedFile::fake()->image('avatar.jpg', $size, $size)->size(Constants::MAX_WEIGHT_EMPLOYER_LOGO / 2)]));
+
+    $response->assertStatus(302);
+    $response->assertValid();
+    $response->assertRedirect(route('users.profile', $this->user->id));
+
+    $this->assertDatabaseHas('employers', $this->getEmployerFormData(['user_id' => $this->user->id]));
+
+    $employer = Employer::latest('id')->first();
+ 
+    Storage::assertExists($employer->logo);
+});
+
+test('employer_create_failed', function () {
+    $response = $this->actingAs($this->user)->post(route('employers.store'), [
+        'name' => '',
+        'description' => '',
+        'url' => '',
+    ]);
+
+    $response->assertStatus(302);
+    $response->assertInvalid(['name', 'description', 'url']);
+});
+
+
+test('employer_create_valid_logo', function () {
+    Storage::fake('public'); // Create a fake storage disk for testing
+
+    $size = (Constants::MIN_RES_EMPLOYER_LOGO + Constants::MAX_RES_EMPLOYER_LOGO) / 2;
+
+    //No logo
+    $response = $this->actingAs($this->user)->post(route('employers.store'), $this->getEmployerFormData());
+    
+    $response->assertStatus(302);
+    $response->assertInvalid(['logo' => 'The logo field is required.']);
+
+    //Too small
+    $response = $this->actingAs($this->user)->post(route('employers.store'), $this->getEmployerFormData(['logo' => UploadedFile::fake()->image('avatar.jpg', 10, 10)->size(Constants::MAX_WEIGHT_EMPLOYER_LOGO / 2)]));
+    
+    $response->assertStatus(302);
+    $response->assertInvalid(['logo' => 'The logo needs to be at least 100x100 and at max 500x500']);
+
+    //Too big
+    $response = $this->actingAs($this->user)->post(route('employers.store'), $this->getEmployerFormData(['logo' => UploadedFile::fake()->image('avatar.jpg', 1000, 1000)->size(Constants::MAX_WEIGHT_EMPLOYER_LOGO / 2)]));
+    
+    $response->assertStatus(302);
+    $response->assertInvalid(['logo' => 'The logo needs to be at least 100x100 and at max 500x500']);
+
+    //Too heavy
+    $response = $this->actingAs($this->user)->post(route('employers.store'), $this->getEmployerFormData(['logo' => UploadedFile::fake()->image('avatar.jpg', $size, $size)->size(Constants::MAX_WEIGHT_EMPLOYER_LOGO + 1)]));
+
+    $response->assertStatus(302);
+    $response->assertInvalid(['logo' => 'The logo field must not be greater than ' . Constants::MAX_WEIGHT_EMPLOYER_LOGO . ' kilobytes.']);
 });
 
 test('employer_edit', function () {

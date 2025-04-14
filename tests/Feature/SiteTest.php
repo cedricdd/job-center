@@ -1,8 +1,6 @@
 <?php
 
 use App\Constants;
-use App\Models\Job;
-use App\Models\User;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;

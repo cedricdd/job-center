@@ -76,4 +76,18 @@ abstract class TestCase extends BaseTestCase
 
         return $employers;
     }
+
+    /**
+     * Provides default form data for an employer, with the ability to override specific fields by passing an associative array.
+     * @param array $infos Optional associative array to override default form data.
+     *                     Example: ['name' => 'Custom Name', 'url' => 'https://customurl.com']
+     * @return array The resulting array containing employer form data.
+     */
+    protected function getEmployerFormData(array $infos = []): array {
+        return $infos + [
+            'name' => 'Test Company',
+            'description' => 'Test Description',
+            'url' => 'https://testcompany.com',
+        ];
+    }
 }

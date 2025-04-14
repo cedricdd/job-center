@@ -2,9 +2,7 @@
 
 use App\Constants;
 
-use App\Models\Job; 
 use App\Models\User;
-use App\Models\Employer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

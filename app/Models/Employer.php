@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Employer extends Model
 {
@@ -31,6 +32,9 @@ class Employer extends Model
 
     public function getLogoUrlAttribute(): string
     {
+        if ($this->logo == null)
+            return Vite::asset("resources/images/logo.jpg");
+
         return preg_match("/logos\/.*/", $this->logo) ? asset("storage/" . $this->logo) : $this->logo;
     }
 }

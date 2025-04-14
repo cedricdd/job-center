@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("name");
             $table->string("url", 2024);
             $table->text("description");
-            $table->string("logo");
+            $table->string("logo")->nullable();
             $table->foreignId("user_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
