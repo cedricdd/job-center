@@ -6,6 +6,7 @@ use App\Constants;
 use App\Models\Job;
 use App\Models\User;
 use App\Models\Employer;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
@@ -21,7 +22,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->user = User::factory()->create();
-        $this->employer = Employer::factory()->create();
+        $this->employer = Employer::factory()->for($this->user, 'user')->create();
         $this->sortingJobs = array_map(
             fn($sort) => explode(" ", $sort),
             explode(', ', Constants::JOB_SORTING[Constants::JOB_SORTING_DEFAULT]["order"])
@@ -79,15 +80,18 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Provides default form data for an employer, with the ability to override specific fields by passing an associative array.
-     * @param array $infos Optional associative array to override default form data.
+     * @param array $infos Optional associative array to override default form data or add more data.
      *                     Example: ['name' => 'Custom Name', 'url' => 'https://customurl.com']
      * @return array The resulting array containing employer form data.
      */
     protected function getEmployerFormData(array $infos = []): array {
+        $size = (Constants::MIN_RES_EMPLOYER_LOGO + Constants::MAX_RES_EMPLOYER_LOGO) / 2;
+
         return $infos + [
             'name' => 'Test Company',
             'description' => 'Test Description',
             'url' => 'https://testcompany.com',
+            'logo' => UploadedFile::fake()->image('avatar.jpg', $size, $size)->size(Constants::MAX_WEIGHT_EMPLOYER_LOGO / 2),
         ];
     }
 }

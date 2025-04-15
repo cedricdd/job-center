@@ -7,6 +7,7 @@ use App\Models\Job;
 use App\Models\Employer;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\EmployerRequest;
 use Illuminate\Support\Facades\Storage;
@@ -35,6 +36,7 @@ class EmployerController extends Controller implements HasMiddleware
             ->withCount("jobs")
             ->orderByRaw(Constants::EMPLOYER_SORTING[$employerSorting]['order'])
             ->having("jobs_count", ">", 0)
+            ->when(Auth::check(), fn($query) => $query->orHavingRaw("1 = 1"))
             ->paginate(Constants::EMPLOYERS_PER_PAGE);
 
         return view("employers.index", compact('employers'));

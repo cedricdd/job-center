@@ -25,15 +25,16 @@ class EmployerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'description' => 'required|min:10',
-            'url' => 'required|active_url',
+            'name' => 'bail|required|string|max:' . Constants::MAX_STRING_LENGTH,
+            'description' => 'bail|required|min:' . Constants::MIN_DESCRIPTION_EMPLOYER_LENGTH,
+            'url' => 'bail|required|active_url',
             'logo' => [
+                'bail',
+                Rule::requiredIf(Route::currentRouteName() == "employers.store"),
                 'image',
                 'mimes:jpg,png,webp',
                 'max:' . Constants::MAX_WEIGHT_EMPLOYER_LOGO,
                 'dimensions:min_width=' . Constants::MIN_RES_EMPLOYER_LOGO . ',min_height=' . Constants::MIN_RES_EMPLOYER_LOGO . ',max_width=' . Constants::MAX_RES_EMPLOYER_LOGO . ',max_height=' . Constants::MAX_RES_EMPLOYER_LOGO,
-                Rule::requiredIf(Route::currentRouteName() == "employers.store")
             ],
         ];
     }

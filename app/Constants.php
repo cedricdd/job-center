@@ -25,6 +25,9 @@ class Constants
     const JOBS_PER_PAGE = 14;
     const EMPLOYERS_PER_PAGE = 20;
 
+    /** Forms */
+    const MAX_STRING_LENGTH = 255;
+    const MIN_DESCRIPTION_EMPLOYER_LENGTH = 10;
     const MAX_WEIGHT_EMPLOYER_LOGO = 4096;
     const MIN_RES_EMPLOYER_LOGO = 100;
     const MAX_RES_EMPLOYER_LOGO = 500;
