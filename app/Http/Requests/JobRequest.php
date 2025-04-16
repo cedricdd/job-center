@@ -25,12 +25,12 @@ class JobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "title" => "required|string|max:255|min:3",
-            "salary" => "required|string|max:255|min:3",
-            "location" => "required|string|max:255",
-            "url" => "required|active_url",
-            "schedule" => ["required", "string", Rule::in(Constants::SCHEDULES)],
-            "employer_id" => ["required", "integer", new OwnerEmployer],
+            "title" => "bail|required|string|max:" . Constants::MAX_STRING_LENGTH . "|min:" . Constants::MIN_STRING_LENGTH,
+            "salary" => "bail|required|string|max:" . Constants::MAX_STRING_LENGTH . "|min:" . Constants::MIN_STRING_LENGTH,
+            "location" => "bail|required|string|max:" . Constants::MAX_STRING_LENGTH. "|min:" . Constants::MIN_STRING_LENGTH,
+            "url" => "bail|required|active_url",
+            "schedule" => ["bail", "required", "string", Rule::in(Constants::SCHEDULES)],
+            "employer_id" => ["bail", "required", "integer", new OwnerEmployer],
             "tags" => "nullable|string",
             "featured" => "nullable|boolean",
         ];

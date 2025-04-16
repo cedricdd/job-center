@@ -27,8 +27,10 @@ class Constants
 
     /** Forms */
     const MAX_STRING_LENGTH = 255;
+    const MIN_STRING_LENGTH = 3;
     const MIN_DESCRIPTION_EMPLOYER_LENGTH = 10;
     const MAX_WEIGHT_EMPLOYER_LOGO = 4096;
     const MIN_RES_EMPLOYER_LOGO = 100;
     const MAX_RES_EMPLOYER_LOGO = 500;
+    const IMAGE_EXTENSIONS_ALLOWED = ["jpg", "png", "webp"];
 }

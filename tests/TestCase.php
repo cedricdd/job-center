@@ -94,4 +94,23 @@ abstract class TestCase extends BaseTestCase
             'logo' => UploadedFile::fake()->image('avatar.jpg', $size, $size)->size(Constants::MAX_WEIGHT_EMPLOYER_LOGO / 2),
         ];
     }
+
+    /**
+     * Provides default form data for a job, with the ability to override specific fields by passing an associative array.
+     * @param array $infos An associative array of custom values to override the default job form data.
+     *                     Example: ['title' => 'Custom Job Title', 'salary' => '60,000 USD']
+     * @return array The resulting array containing job form data.
+     */
+    protected function getJobFormData(array $infos = []): array {
+        return $infos + [
+            'title' => 'Test Job',
+            'location' => 'Test Location',
+            'schedule' => 'Full Time',
+            'salary' => "$50.000 USD",
+            'url' => 'https://testjob.com',
+            'tags' => 'tag1,tag2',
+            'employer_id' => $this->employer->id,
+            'featured' => false,
+        ];
+    }
 }

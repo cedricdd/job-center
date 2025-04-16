@@ -38,7 +38,7 @@ test('employer_validate_employer_form_request', function ($fields, $list) {
     [['name', 'description', 'url'], ['', 'required']],
     [['name'], [str_repeat('a', Constants::MAX_STRING_LENGTH + 1), 'max.string', ['max' => Constants::MAX_STRING_LENGTH]]],
     [['description'], [str_repeat('a', Constants::MIN_DESCRIPTION_EMPLOYER_LENGTH - 1), 'min.string', ['min' => Constants::MIN_DESCRIPTION_EMPLOYER_LENGTH]]],
-    [['url'], ['invalid-url', 'active_url']],
+    [['url'], ['invalid-url', 'active_url']], 
 ]);
 
 test('employer_create_validate_logo', function () {
@@ -50,37 +50,37 @@ test('employer_create_validate_logo', function () {
     $this->actingAs($this->user)
         ->post(route('employers.store'), $this->getEmployerFormData(['logo' => null]))
         ->assertStatus(302)
-        ->assertInvalid(['logo' => 'The logo field is required.']);
+        ->assertInvalid(['logo' => Lang::get('validation.required', ['attribute' => 'logo'])]);
 
     //Too small
     $this->actingAs($this->user)
         ->post(route('employers.store'), $this->getEmployerFormData(['logo' => UploadedFile::fake()->image('avatar.jpg', 10, 10)->size(Constants::MAX_WEIGHT_EMPLOYER_LOGO / 2)]))
         ->assertStatus(302)
-        ->assertInvalid(['logo' => 'The logo needs to be at least 100x100 and at max 500x500']);
+        ->assertInvalid(['logo' => Lang::get('validation.logo_dimensions')]);
 
     //Too big
     $this->actingAs($this->user)
         ->post(route('employers.store'), $this->getEmployerFormData(['logo' => UploadedFile::fake()->image('avatar.jpg', 1000, 1000)->size(Constants::MAX_WEIGHT_EMPLOYER_LOGO / 2)]))
         ->assertStatus(302)
-        ->assertInvalid(['logo' => 'The logo needs to be at least 100x100 and at max 500x500']);
+        ->assertInvalid(['logo' => Lang::get('validation.logo_dimensions')]);
 
     //Too heavy
     $this->actingAs($this->user)
         ->post(route('employers.store'), $this->getEmployerFormData(['logo' => UploadedFile::fake()->image('avatar.jpg', $size, $size)->size(Constants::MAX_WEIGHT_EMPLOYER_LOGO + 1)]))
         ->assertStatus(302)
-        ->assertInvalid(['logo' => 'The logo field must not be greater than ' . Constants::MAX_WEIGHT_EMPLOYER_LOGO . ' kilobytes.']);
+        ->assertInvalid(['logo' => Lang::get('validation.max.file', ['attribute' => 'logo', 'max' => Constants::MAX_WEIGHT_EMPLOYER_LOGO])]);
 
     //Not an image
     $this->actingAs($this->user)
         ->post(route('employers.store'), $this->getEmployerFormData(['logo' => UploadedFile::fake()->create('avatar.pdf', Constants::MAX_WEIGHT_EMPLOYER_LOGO / 2)]))
         ->assertStatus(302)
-        ->assertInvalid(['logo' => 'The logo field must be an image.']);
+        ->assertInvalid(['logo' => Lang::get('validation.image', ['attribute' => 'logo'])]);
 
     //Wrong type
     $this->actingAs($this->user)
         ->post(route('employers.store'), $this->getEmployerFormData(['logo' => UploadedFile::fake()->image('avatar.gif', $size, $size)->size(Constants::MAX_WEIGHT_EMPLOYER_LOGO / 2)]))
         ->assertStatus(302)
-        ->assertInvalid(['logo' => ['The logo field must be a file of type: jpg, png, webp.']]);
+        ->assertInvalid(['logo' => Lang::get('validation.mimes', ['attribute' => 'logo', 'values' => implode(', ', Constants::IMAGE_EXTENSIONS_ALLOWED)])]);
 });
 
 test('employer_update_successful', function () {

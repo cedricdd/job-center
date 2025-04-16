@@ -135,6 +135,6 @@ class JobController extends Controller implements HasMiddleware
     {
         $job->delete();
 
-        return redirect()->route("jobs.index")->with("success", "The job $job->title was successfully deleted!");
+        return redirect()->route("users.profile", Auth::id())->with("success", "The job $job->title was successfully deleted!");
     }
 }
