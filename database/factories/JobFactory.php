@@ -20,7 +20,7 @@ class JobFactory extends Factory
     public function definition(): array
     {
         $date = new DateTime();
-        $date->setTimezone(new \DateTimeZone('UTC'));
+        $date->setTimezone(new \DateTimeZone('CET'));
         $date->modify('-' . random_int(1, 60*60*30) . ' minutes')->format("Y-m-d H:i:s");
 
         return [

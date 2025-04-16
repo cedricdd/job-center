@@ -4,9 +4,6 @@ use App\Constants;
 use App\Models\Job;
 
 use App\Models\Tag;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
 
 test('tags_index', function () {
     //Create a number of tags with 1 job (we don't show tags without jobs)

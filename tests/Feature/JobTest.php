@@ -3,9 +3,6 @@
 use App\Constants;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
 
 test('job_index', function () {
     $jobs = $this->createJobs(count: Constants::JOBS_PER_PAGE + 1);

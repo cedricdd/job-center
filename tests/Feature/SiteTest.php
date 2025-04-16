@@ -3,10 +3,6 @@
 use App\Constants;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
-
 
 test('index', function () {
     $response = $this->get(route('index'));
