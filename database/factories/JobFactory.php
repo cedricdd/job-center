@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Constants;
+use DateTime;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,7 +19,8 @@ class JobFactory extends Factory
      */
     public function definition(): array
     {
-        $date = fake()->dateTimeThisMonth(timezone: 'CET');
+        $date = new DateTime();
+        $date->modify('-' . random_int(1, 60*60*30) . ' minutes')->format("Y-m-d H:i:s");
 
         return [
             "title" => fake()->jobTitle(),
