@@ -4,6 +4,7 @@ use App\Constants;
 use App\Models\Employer;
 use Illuminate\Support\Arr;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 
 test('employer_create_successful', function () {
@@ -21,35 +22,23 @@ test('employer_create_successful', function () {
     Storage::assertExists(Employer::latest('id')->first()->logo);
 });
 
-test('employer_validate_employer_form_request', function ($field, $list) {
+test('employer_validate_employer_form_request', function ($fields, $list) {
     Storage::fake('public'); // Create a fake storage disk in case the validation doesn't fail
 
-    foreach($list as [$value, $error]) {
+    foreach($fields as $field) {
+        $attribute = Lang::has("validation.attributes.{$field}") ? Lang::get("validation.attributes.{$field}") : $field;
+        $error = Lang::get('validation.' . $list[1], compact('attribute') + ($list[2] ?? []));
+    
         $this->actingAs($this->user)
-            ->post(route('employers.store'), $this->getEmployerFormData([$field => $value]))
+            ->post(route('employers.store'), $this->getEmployerFormData([$field => $list[0]]))
             ->assertStatus(302)
             ->assertInvalid([$field => $error]); // Assert validation errors
     }
 })->with([
-    // Test cases: [field, [
-    //     [value, error message],
-    //     ...
-    // ]]
-    ['name',  [
-            ['', 'The name field is required.'],
-            [str_repeat('a', Constants::MAX_STRING_LENGTH + 1), 'The name field must not be greater than ' . Constants::MAX_STRING_LENGTH . ' characters.'],
-        ]
-    ],
-    ['description', [
-            ['', 'The description field is required.'],
-            [str_repeat('a', Constants::MIN_DESCRIPTION_EMPLOYER_LENGTH - 1), 'The description field must be at least ' . Constants::MIN_DESCRIPTION_EMPLOYER_LENGTH . ' characters.'],
-        ],
-    ],
-    ['url', [
-            ['', 'The url field is required.'],
-            ['invalid-url', 'The url field must be a valid URL.'],
-        ],
-    ],
+    [['name', 'description', 'url'], ['', 'required']],
+    [['name'], [str_repeat('a', Constants::MAX_STRING_LENGTH + 1), 'max.string', ['max' => Constants::MAX_STRING_LENGTH]]],
+    [['description'], [str_repeat('a', Constants::MIN_DESCRIPTION_EMPLOYER_LENGTH - 1), 'min.string', ['min' => Constants::MIN_DESCRIPTION_EMPLOYER_LENGTH]]],
+    [['url'], ['invalid-url', 'active_url']],
 ]);
 
 test('employer_create_validate_logo', function () {
