@@ -54,3 +54,31 @@ test('tag_show_sorting_jobs', function() {
             ->assertViewHas('jobs', fn($jobs) => !$jobs->contains($sortedJobs->last()));
     }
 });
+
+test('tag_autocomplete', function() {
+    $tagCount = 20;
+
+    for($i = 0; $i < $tagCount; ++$i) {
+        Tag::factory()->create(['name' => 'ab' . $i]);
+    }
+
+    $this->actingAs($this->user)
+        ->post(route('tags.autocomplete', ['term' => 'ab']))
+        ->assertJsonIsArray()
+        ->assertJsonCount($tagCount)
+        ->assertJsonStructure(['*' => ['label', 'value']]);
+
+    //Check that the tags already selected stay in the response
+    $this->actingAs($this->user)
+        ->post(route('tags.autocomplete', ['term' => 'ab1, ab2, ab']))
+        ->assertJsonFragment(['value' => 'ab1, ab2, ab3']);
+
+    //Check that we don't return anything with just 1 character
+    $this->actingAs($this->user)
+        ->post(route('tags.autocomplete', ['term' => 'a']))
+        ->assertJsonCount(0);
+});
+
+test('tag_autocomplete_not_for_guest', function() {
+    $this->post(route('tags.autocomplete', ['term' => 'ab']))->assertRedirectToRoute('sessions.create');
+});

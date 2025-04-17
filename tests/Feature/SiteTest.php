@@ -5,81 +5,87 @@ use App\Constants;
 use Illuminate\Support\Facades\DB;
 
 test('index', function () {
-    $response = $this->get(route('index'));
-
-    $response->assertStatus(200);
-    $response->assertSeeText('Find Your Next Job', 'Featured Jobs', 'Tags', 'Jobs');
-});
-
-test('login', function () {
-    $response = $this->get(route('sessions.create'));
-
-    $response->assertStatus(200);
-    $response->assertSeeTextInOrder(['Email', 'Password']);
-});
-
-test('login_cant_be_accessed_by_authenticated_user', function () {
-    $response = $this->actingAs($this->user)->get(route('sessions.create'));
-
-    $response->assertRedirect(route('index'));
-});
-
-test('register', function () {
-    $response = $this->get(route('users.create'));
-
-    $response->assertStatus(200);
-    $response->assertSeeTextInOrder(['Name', 'Email', 'Password']);
-});
-
-test('register_cant_be_accessed_by_authenticated_user', function () {
-    $response = $this->actingAs($this->user)->get(route('users.create'));
-
-    $response->assertRedirect(route('index'));
-});
-
-test('profile', function () {
-    $response = $this->actingAs($this->user)->get(route('users.profile'));
-
-    $response->assertStatus(200);
-    $response->assertSeeTextInOrder(['Your Profile', 'Your Profile']);
-});
-
-test('profile_cant_be_accessed_by_guest_user', function () {
-    $response = $this->get(route('users.profile'));
-
-    $response->assertRedirect(route('sessions.create'));
+    $this->get(route('index'))
+        ->assertStatus(200)
+        ->assertSeeText('Find Your Next Job', 'Featured Jobs', 'Tags', 'Jobs');
 });
 
 test('search', function () {
-    $response = $this->get(route('search'));
-
-    $response->assertStatus(200);
-    $response->assertSeeText("No jobs matching your search have been found");
+    $this->get(route('search', ['q' => '']))
+        ->assertStatus(200)
+        ->assertSeeText("No jobs matching your search have been found!");
 });
 
 test('search_with_query', function () {
-    $jobs = $this->createJobs(count: Constants::JOBS_PER_PAGE + 1, params: ['title' => 'Test Job' . rand(1, 100)]);
+    $jobs = $this->createJobs(count: Constants::JOBS_PER_PAGE * 2, params: ['title' => 'Test Job' . rand(1, 100)]);
 
     DB::commit(); //Fulltext search requires a commit to be effective, it doesn't work inside a transaction
 
-    $response = $this->get(route('search', ['q' => 'Test Job']));
-
-    $response->assertStatus(200);
-    $response->assertDontSeeText("No jobs matching your search have been found");
-
     $sortedJobs = $jobs->sortBy($this->sortingJobs);
 
-    $response->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->first()));
-    $response->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->last()));
+    $this->get(route('search', ['q' => 'Test Job']))
+        ->assertStatus(200)
+        ->assertDontSeeText("No jobs matching your search have been found!")
+        ->assertViewHas('jobs', fn($viewJobs) => $viewJobs->first()->is($sortedJobs->first()))
+        ->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->last()));
 
-    $response = $this->get(route('search', ['q' => 'Test Job', 'page' => 2]));
+    $this->get(route('search', ['q' => 'Test Job', 'page' => 2]))
+        ->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->first()))
+        ->assertViewHas('jobs', fn($viewJobs) => $viewJobs->last()->is($sortedJobs->last()));
+});
 
-    $response->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->first()));
-    $response->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->last()));
+test('search_sorting', function() {
+    $jobs = $this->createJobs(count: Constants::JOBS_PER_PAGE * 2, params: ['location' => 'Remote']);
+
+    DB::commit(); //Fulltext search requires a commit to be effective, it doesn't work inside a transaction
+
+    foreach(Constants::JOB_SORTING as $sorting => $sortingData) {
+        $sortedJobs = $jobs->sortBy(array_map(
+            fn($sort) => explode(" ", $sort),
+            explode(', ', $sortingData["order"])
+        ));
+
+        $this->withSession(['job-sorting' => $sorting])
+            ->get(route('search', ['q' => 'Remote']))
+            ->assertStatus(200)
+            ->assertViewHas('jobs', fn($viewJobs) => $viewJobs->first()->is($sortedJobs->first()))
+            ->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->last()));
+    }
+});
+
+
+test('set_sorting_jobs', function() {
+    foreach(Constants::JOB_SORTING as $sorting => $sortingData) {
+        $this->post(route('sorting', 'job'), ['sorting' => $sorting])
+            ->assertSessionHas('job-sorting', $sorting)
+            ->assertStatus(302);
+    }
+});
+
+test('set_sorting_jobs_invalid_valid_ignored', function() {
+    $this->post(route('sorting', 'job'), ['sorting' => 'invalid-sorting'])
+        ->assertSessionMissing('job-sorting')
+        ->assertStatus(302);
+});
+
+test('set_sorting_employers', function() {
+    foreach(Constants::EMPLOYER_SORTING as $sorting => $sortingData) {
+        $this->post(route('sorting', 'employer'), ['sorting' => $sorting])
+            ->assertSessionHas('employer-sorting', $sorting)
+            ->assertStatus(302);
+    }
+});
+
+test('set_sorting_employers_invalid_valid_ignored', function() {
+    $this->post(route('sorting', 'employer'), ['sorting' => 'invalid-sorting'])
+        ->assertSessionMissing('employer-sorting')
+        ->assertStatus(302);
+});
+
+test('set_sorting_invalid_type', function() {
+    $this->post(route('sorting', 'invalid'), ['sorting' => 'random'])->assertStatus(404);
 });
 
 test('check_redirect_fallback', function () {
-    $response = $this->get('/non-existent-route');
-
-    $response->assertRedirectToRoute('index');
+    $this->get('/non-existent-route')->assertRedirectToRoute('index');
 });

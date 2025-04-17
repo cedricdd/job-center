@@ -5,19 +5,19 @@ use App\Constants;
 use App\Models\User;
 
 test('job_index', function () {
-    $jobs = $this->createJobs(count: Constants::JOBS_PER_PAGE + 1);
+    $jobs = $this->createJobs(count: Constants::JOBS_PER_PAGE * 2);
 
     $sortedJobs = $jobs->sortBy($this->sortingJobs);
 
     $this->get(route('jobs.index'))
         ->assertStatus(200)
         ->assertSee('action="' . route('search') . '"', false)
-        ->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->first()))
+        ->assertViewHas('jobs', fn($viewJobs) => $viewJobs->first()->is($sortedJobs->first()))
         ->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->last()));
 
     $this->get(route('jobs.index', ['page' => 2]))
         ->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->first()))
-        ->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->last()));
+        ->assertViewHas('jobs', fn($viewJobs) => $viewJobs->last()->is($sortedJobs->last()));
 });
 
 test('job_index_sorting', function() {
@@ -32,7 +32,7 @@ test('job_index_sorting', function() {
         $this->withSession(['job-sorting' => $sorting])
             ->get(route('jobs.index'))
             ->assertStatus(200)
-            ->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->first()))
+            ->assertViewHas('jobs', fn($viewJobs) => $viewJobs->first()->is($sortedJobs->first()))
             ->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->last()));
     }
 });
@@ -67,19 +67,19 @@ test('job_index_guest_does_not_see_job_options', function () {
 
 
 test('job_featured', function () {
-    $jobs = $this->createJobs(count: Constants::JOBS_PER_PAGE + 1, params: ['featured' => true]);
+    $jobs = $this->createJobs(count: Constants::JOBS_PER_PAGE * 2, params: ['featured' => true]);
 
     $sortedJobs = $jobs->sortBy($this->sortingJobs);
 
     $this->get(route('jobs.featured'))
         ->assertStatus(200)
         ->assertSee('action="' . route('search') . '"', false)
-        ->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->first()))
+        ->assertViewHas('jobs', fn($viewJobs) => $viewJobs->first()->is($sortedJobs->first()))
         ->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->last()));
 
     $this->get(route('jobs.index', ['page' => 2]))
         ->assertViewHas('jobs', fn($viewJobs) => !$viewJobs->contains($sortedJobs->first()))
-        ->assertViewHas('jobs', fn($viewJobs) => $viewJobs->contains($sortedJobs->last()));
+        ->assertViewHas('jobs', fn($viewJobs) => $viewJobs->last()->is($sortedJobs->last()));
 });
 
 test('job_featured_shows_only_featured', function () {

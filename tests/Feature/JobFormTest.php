@@ -3,7 +3,6 @@
 use App\Constants;
 use App\Models\Job;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Lang;
 
 test('job_create_successful', function () {
     $data = $this->getJobFormData();
@@ -20,29 +19,19 @@ test('job_create_successful', function () {
     expect(Job::first()->tags->pluck('name')->toArray())->toBe(array_map('ucwords', explode(",", $data['tags'])));
 });
 
-test('job_validate_employer_form_request', function ($fields, $infos) {
-    foreach($fields as $field) {
-
-        //Get the error message based on the rule used
-        $attribute = Lang::has("validation.attributes.{$field}") ? Lang::get("validation.attributes.{$field}") : $field;
-        $error = Lang::get('validation.' . $infos[1], compact('attribute') + ($infos[2] ?? []));
-
-        $this->actingAs($this->user)
-            ->post(route('jobs.store'), $this->getJobFormData([$field => $infos[0]]))
-            ->assertStatus(302)
-            ->assertInvalid([$field => $error]); // Assert validation errors
-    }
-})->with([
-    [['title', 'salary', 'location', 'url', 'schedule', 'employer_id'], ['', 'required']],
-    [['title', 'salary', 'location', 'schedule', 'tags'], [true, 'string']],
-    [['title', 'salary', 'location'], [str_repeat('a', Constants::MAX_STRING_LENGTH + 1), 'max.string', ['max' => Constants::MAX_STRING_LENGTH]]],
-    [['title', 'salary', 'location'], ['a', 'min.string', ['min' => Constants::MIN_STRING_LENGTH]]],
-    [['url'], ['invalid-url', 'active_url']],
-    [['schedule'], ['invalid_schedule', 'in']],
-    [['employer_id'], ['invalid', 'integer']],
-    [['employer_id'], [0, 'owner_employer']],
-    [['featured'], ['invalid', 'boolean']],
-]);
+test('job_validate_form_request', function () {
+    $this->checkForm(route('jobs.store'), $this->getJobFormData(), [
+        [['title', 'salary', 'location', 'url', 'schedule', 'employer_id'], 'required', ''],
+        [['title', 'salary', 'location', 'schedule', 'tags'], 'string', false],
+        [['title', 'salary', 'location'], 'max.string', str_repeat('a', Constants::MAX_STRING_LENGTH + 1), ['max' => Constants::MAX_STRING_LENGTH]],
+        [['title', 'salary', 'location'], 'min.string', 'a', ['min' => Constants::MIN_STRING_LENGTH]],
+        ['url', 'active_url', 'invalid-url'],
+        ['schedule', 'in', 'invalid_schedule'],
+        ['employer_id', 'integer', 'invalid'],
+        ['employer_id', 'owner_employer', 0],
+        ['featured', 'boolean', 'invalid'],
+    ], $this->user);
+});
 
 test('job_update_successful', function () {
     $job = $this->createJobs(count: 1, user: $this->user);

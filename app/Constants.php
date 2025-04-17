@@ -33,4 +33,6 @@ class Constants
     const MIN_RES_EMPLOYER_LOGO = 100;
     const MAX_RES_EMPLOYER_LOGO = 500;
     const IMAGE_EXTENSIONS_ALLOWED = ["jpg", "png", "webp"];
+    const MIN_PASSWORD_LENGTH = 7;
+    const MAX_PASSWORD_LENGTH = 100;
 }

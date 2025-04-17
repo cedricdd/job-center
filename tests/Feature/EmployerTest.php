@@ -5,7 +5,7 @@ use App\Models\User;
 
 test('employer_index', function () {
     //Create a number of employers with 1 job (we don't show employers without jobs)
-    $employers = $this->createEmployers(count: Constants::EMPLOYERS_PER_PAGE + 1);
+    $employers = $this->createEmployers(count: Constants::EMPLOYERS_PER_PAGE * 2);
 
     //Sort the employers by the default sorting
     $employersSorted = $employers->sortBy($this->sortingEmployers);
@@ -13,12 +13,12 @@ test('employer_index', function () {
     $this->get(route('employers.index'))
         ->assertStatus(200)
         ->assertSeeText('Company List')
-        ->assertViewHas('employers', fn($viewEmployers) => $viewEmployers->contains($employersSorted->first()))
+        ->assertViewHas('employers', fn($viewEmployers) => $viewEmployers->first()->is($employersSorted->first()))
         ->assertViewHas('employers', fn($viewEmployers) => !$viewEmployers->contains($employersSorted->last()));
 
     $this->get(route('employers.index', ['page' => 2]))
         ->assertViewHas('employers', fn($viewEmployers) => !$viewEmployers->contains($employersSorted->first()))
-        ->assertViewHas('employers', fn($viewEmployers) => $viewEmployers->contains($employersSorted->last()));
+        ->assertViewHas('employers', fn($viewEmployers) => $viewEmployers->last()->is($employersSorted->last()));
 });
 
 test('employer_sorting', function () {
@@ -94,7 +94,7 @@ test('employer_non_owner_dont_see_options', function () {
 });
 
 test('employer_show', function () {
-    $employer = $this->createEmployers(count: 1, jobsCount: Constants::JOBS_PER_PAGE + 1);
+    $employer = $this->createEmployers(count: 1, jobsCount: Constants::JOBS_PER_PAGE * 2);
 
     $sortedJobs = $employer->jobs->sortBy($this->sortingJobs);
 
@@ -102,12 +102,12 @@ test('employer_show', function () {
         ->assertStatus(200)
         ->assertSeeText($employer->name)
         ->assertViewHas('employer', fn($viewEmployer) => $viewEmployer->is($employer))
-        ->assertViewHas('jobs', fn($jobs) => $jobs->contains($sortedJobs->first()))
+        ->assertViewHas('jobs', fn($jobs) => $jobs->first()->is($sortedJobs->first()))
         ->assertViewHas('jobs', fn($jobs) => !$jobs->contains($sortedJobs->last()));
 
     $this->get(route('employers.show', [$employer->id, 'page' => 2]))
-        ->assertViewHas('jobs', fn($jobs) => $jobs->contains($sortedJobs->last()))
-        ->assertViewHas('jobs', fn($jobs) => !$jobs->contains($sortedJobs->first()));
+        ->assertViewHas('jobs', fn($jobs) => !$jobs->contains($sortedJobs->first()))
+        ->assertViewHas('jobs', fn($jobs) => $jobs->last()->is($sortedJobs->last()));
 });
 
 test('employer_create', function () {
