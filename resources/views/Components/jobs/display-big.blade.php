@@ -45,13 +45,13 @@
     @canany(['update', 'destroy'], $job)
         <div class="flex flex-col justify-center gap-y-2">
             @can('update', $job)
-                <x-link-button-blue href="{{ route('jobs.edit', $job->id) }}">Edit</x-link-button-blue>
+                <x-link-button color='blue' href="{{ route('jobs.edit', $job->id) }}">Edit</x-link-button>
             @endcan
             @can('destroy', $job)
                 <form action="{{ route('jobs.destroy', $job->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <x-forms.button-red>Delete</x-forms.button-red>
+                    <x-forms.button color='red'>Delete</x-forms.button>
                 </form>
             @endcan
         </div>

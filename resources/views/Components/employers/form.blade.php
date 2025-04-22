@@ -20,7 +20,7 @@
         @endif
     </div>
     <div class="flex justify-between gap-x-2">
-        <x-link-button-white href="{{ url()->previous() }}">Cancel</x-link-button-white>
-        <x-forms.button-blue>{{ $action == "create" ? "Create" : "Edit" }}</x-forms.button-blue>
+        <x-link-button href="{{ url()->previous() }}">Cancel</x-link-button>
+        <x-forms.button color='blue'>{{ $action == "create" ? "Create" : "Edit" }}</x-forms.button>
     </div>
 </form>

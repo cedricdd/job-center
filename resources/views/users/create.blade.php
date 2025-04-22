@@ -20,8 +20,8 @@
             <x-forms.input input-name="password_confirmation" label="Confirm Password" type="password" required />
         </div>
         <div class="flex justify-between gap-x-2">
-            <x-link-button-white href="/">Cancel</x-link-button-white>
-            <x-forms.button-blue>Register</x-forms.button-blue>
+            <x-link-button href="/">Cancel</x-link-button>
+            <x-forms.button color='blue'>Register</x-forms.button>
         </div>
     </form>
 @endsection

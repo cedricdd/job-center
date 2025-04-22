@@ -36,8 +36,8 @@
         <x-forms.checkbox input-name="featured" label="Featured Job (You should pay for that but it's just a test project)" :checked="old('featured', $job?->featured)" />
     </div>
     <div class="flex justify-between gap-2">
-        <x-link-button-white href="{{ route('jobs.index') }}">Cancel</x-link-button-white>
-        <x-forms.button-blue>{{ $action }}</x-forms.button-blue>
+        <x-link-button href="{{ route('jobs.index') }}">Cancel</x-link-button>
+        <x-forms.button color='blue'>{{ $action }}</x-forms.button>
     </div>
 </form>
 

@@ -15,8 +15,8 @@
     <x-header-title>Your Companies</x-header-title>
 
     <div class="text-center mb-6">
-        <x-link-button-blue href="{{ route('employers.create') }}" class="!w-[150px]">Add A Company</x-link-button-blue>
-        <x-link-button-green href="{{ route('jobs.create') }}" class="!w-[150px]">Add A Job</x-link-button-green>
+        <x-link-button color='blue' href="{{ route('employers.create') }}" class="!w-[150px]">Add A Company</x-link-button>
+        <x-link-button color='green' href="{{ route('jobs.create') }}" class="!w-[150px]">Add A Job</x-link-button>
     </div>
 
     <div class="space-y-4">

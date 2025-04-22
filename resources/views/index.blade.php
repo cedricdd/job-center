@@ -40,7 +40,7 @@
         </div>
 
         <div class="text-center mt-6">
-            <x-link-button-blue href="{{ route('jobs.index') }}" class="!text-xl">See all jobs</x-link-button-blue>
+            <x-link-button color='blue' href="{{ route('jobs.index') }}" class="!text-xl">See all jobs</x-link-button>
         </div>
     </section>
 @endsection

@@ -19,16 +19,16 @@
                 @endif
             </p>
             <div class="flex-1 flex gap-2 justify-end">
-                <x-link-button-white href="{{ $employer->url }}" target='_blank'>Website</x-link-button-white>
+                <x-link-button href="{{ $employer->url }}" target='_blank'>Website</x-link-button>
                 @can('update', $employer)
-                    <x-link-button-green href="{{ route('jobs.create', $employer->id) }}">Add Job</x-link-button-green>
-                    <x-link-button-blue href="{{ route('employers.edit', $employer->id) }}">Edit</x-link-button-blue>
+                    <x-link-button color='green' href="{{ route('jobs.create', $employer->id) }}">Add Job</x-link-button>
+                    <x-link-button color='blue' href="{{ route('employers.edit', $employer->id) }}">Edit</x-link-button>
                 @endcan
                 @can('destroy', $employer)
                     <form action="{{ route('employers.destroy', $employer->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <x-forms.button-red>Delete</x-forms.button-red>
+                        <x-forms.button color='red'>Delete</x-forms.button>
                     </form>
                 @endcan
             </div>

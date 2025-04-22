@@ -22,7 +22,7 @@
                 <a href="{{ route('search', ["q" => urlencode($job->location)]) }}">{{ $job->location }}</a>
             </x-span-info>
         </div>
-        <x-link-button-white href="{{ $job->url }}">More Infos</x-link-button-white>
+        <x-link-button href="{{ $job->url }}">More Infos</x-link-button>
     </div>
 
     <div class="mt-2 inline-flex flex-wrap gap-2 items-center justify-start">
@@ -37,11 +37,11 @@
                 <form action="{{ route('jobs.destroy', $job->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <x-forms.button-red>Delete Job</x-forms.button-red>
+                    <x-forms.button color='red'>Delete Job</x-forms.button>
                 </form>
             @endcan
             @can('update', $job)
-                <x-link-button-blue href="{{ route('jobs.edit', $job->id) }}">Edit Job</x-link-button-blue>
+                <x-link-button color='blue' href="{{ route('jobs.edit', $job->id) }}">Edit Job</x-link-button>
             @endcan
         </div>
     @endcanany
