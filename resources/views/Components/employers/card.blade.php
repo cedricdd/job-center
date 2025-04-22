@@ -1,5 +1,5 @@
 <x-card>
-    <div class="flex items-center gap-2 w-full">
+    <div class="flex flex-col sm:flex-row items-center gap-2 w-full">
         <div class="w-[125px] h-[125px] flex justify-center items-center mr-6">
             <a href="{{ route('employers.show', $employer->id) }}">
                 <img loading="lazy" src="{{ $employer->logoUrl }}" alt="{{ $employer->name }}-logo">

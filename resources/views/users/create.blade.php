@@ -19,7 +19,7 @@
         <div class="mb-5">
             <x-forms.input input-name="password_confirmation" label="Confirm Password" type="password" required />
         </div>
-        <div class="flex justify-between">
+        <div class="flex justify-between gap-x-2">
             <x-link-button-white href="/">Cancel</x-link-button-white>
             <x-forms.button-blue>Register</x-forms.button-blue>
         </div>

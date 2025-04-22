@@ -19,7 +19,7 @@
             <p class="italic">* Not providing a logo will not remove the current logo.</p>
         @endif
     </div>
-    <div class="flex justify-between">
+    <div class="flex justify-between gap-x-2">
         <x-link-button-white href="{{ url()->previous() }}">Cancel</x-link-button-white>
         <x-forms.button-blue>{{ $action == "create" ? "Create" : "Edit" }}</x-forms.button-blue>
     </div>

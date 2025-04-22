@@ -14,7 +14,7 @@
 @endphp
 
 <div class="mt-4 p-6 bg-white/10 rounded">
-    <form action="{{ $route }}" method="POST" class="flex justify-center items-center gap-x-2">
+    <form action="{{ $route }}" method="POST" class="flex justify-center items-center flex-wrap gap-2">
         @csrf
         @foreach ($elements as $name => ['label' => $sorting])
             <x-forms.button-white name="sorting" value="{{ $name }}">

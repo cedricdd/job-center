@@ -3,7 +3,7 @@
 @section('title', 'Jobs Center')
 
 @section('content')
-    <section class="text-center mb-30">
+    <section class="text-center mb-15 md:mb-30">
         <h1 class="text-3xl mb-4">Find Your Next Job</h1>
         <form action="{{ route('search') }}" class="mp-6 flex justify-center" method="GET">
             <x-forms.input input-name="q" placeholder="Web Developper" class="!bg-white/10 !border-white/20 !text-white px-6 py-3 rounded-xl w-full max-w-2xl" />

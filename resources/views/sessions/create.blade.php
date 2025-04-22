@@ -11,7 +11,7 @@
         <div class="mb-5">
             <x-forms.input input-name="password" label="Password" type="password" required />
         </div>
-        <div class="flex justify-between gap-2">
+        <div class="flex justify-between gap-x-2">
             <x-link-button-white href="/">Cancel</x-link-button-white>
             <x-forms.button-blue>Login</x-forms.button-blue>
         </div>
