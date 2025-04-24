@@ -67,6 +67,20 @@ class SiteController extends Controller
         }
         else abort(404);
 
-        return redirect()->back();
+        $parts = parse_url(url()->previous());
+        parse_str($parts['query'] ?? '', $parameters);
+
+        //We remove the 'page' parameter.
+        unset($parameters['page']);
+
+        $redirectUrl = $parts['path'];
+
+        //We still have some parameters
+        if (count($parameters)) {
+            $redirectUrl .= "?" . http_build_query($parameters);
+        }
+
+        //Redirect to the page without the bad param
+        return redirect($redirectUrl, 301);
     }
 }
