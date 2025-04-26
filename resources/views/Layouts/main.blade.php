@@ -31,7 +31,7 @@
                     <form action="{{ route("sessions.destroy") }}" method="POST" class="inline-block">
                         @csrf
                         @method("DELETE")
-                        <x-forms.button-white>Logout</x-forms.button-white>
+                        <x-forms.button>Logout</x-forms.button>
                     </form>
                 @endauth
                 @guest
