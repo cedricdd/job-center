@@ -14,7 +14,7 @@
         <x-forms.input input-name="url" label="URL" value="{{ old('url', $employer?->url) }}" placeholder="Enter an URL for the company" />
     </div>
     <div class="mb-8">
-        <x-forms.input input-name="logo" label="Logo (Best 250*250 px)" type="file" value="{{ old('url') }}" />
+        <x-forms.input input-name="logo" label="Logo (Best 250*250 px)" type="file" />
         @if($action == "edit")
             <p class="italic">* Not providing a logo will not remove the current logo.</p>
         @endif
