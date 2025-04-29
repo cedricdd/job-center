@@ -19,10 +19,6 @@ class JobFactory extends Factory
      */
     public function definition(): array
     {
-        $date = new DateTime();
-        $date->setTimezone(new \DateTimeZone('CET'));
-        $date->modify('-' . random_int(1, 60*60*30) . ' minutes')->format("Y-m-d H:i:s");
-
         return [
             "title" => fake()->jobTitle(),
             "salary" => "$" . number_format(fake()->numberBetween(10000, 1000000)) . " USD",
@@ -31,8 +27,8 @@ class JobFactory extends Factory
             "url" => fake()->url(),
             "featured" => random_int(1, 20) == 10 ? true : false,
             "employer_id" => \App\Models\Employer::factory(),
-            "created_at" => $date,
-            "updated_at" => $date,
+            "created_at" => fake()->dateTimeBetween('-1 year', 'now'),
+            "updated_at" => fake()->dateTimeBetween('created_at', 'now'),
         ];
     }
 }
