@@ -27,8 +27,8 @@ class JobFactory extends Factory
             "url" => fake()->url(),
             "featured" => random_int(1, 20) == 10 ? true : false,
             "employer_id" => \App\Models\Employer::factory(),
-            "created_at" => fake()->dateTimeBetween('-1 year', 'now'),
-            "updated_at" => fake()->dateTimeBetween('created_at', 'now'),
+            'created_at' => ($date = fake()->dateTimeBetween('-1 year', 'now')),
+            'updated_at' => (clone $date)->modify('+' . (random_int(0, 1) ? random_int(1, 43200) : 0) . ' minutes'),
         ];
     }
 }
